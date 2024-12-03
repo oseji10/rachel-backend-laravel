@@ -8,7 +8,7 @@ class EncountersController extends Controller
 {
     public function RetrieveAll()
     {
-        $encounters = Encounters::with('consulting', 'continue_consulting')->get();
+        $encounters = Encounters::with('patients', 'consulting', 'continue_consulting')->get();
         return response()->json($encounters); 
        
     }

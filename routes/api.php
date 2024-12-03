@@ -15,6 +15,7 @@ use App\Http\Controllers\DoctorsController;
 use App\Http\Controllers\PatientsController;
 use App\Http\Controllers\ConsultingController;
 use App\Http\Controllers\ContinueConsultingController;
+use App\Http\Controllers\EncountersController;
 
 
 /*
@@ -72,3 +73,6 @@ Route::post('/consulting', [ConsultingController::class, 'store']);
 
 Route::get('/continue_consulting', [ContinueConsultingController::class, 'retrieveAll']);
 Route::post('/continue_consulting', [ContinueConsultingController::class, 'store']);
+
+Route::get('/encounters', [EncountersController::class, 'retrieveAll']);
+Route::post('/encounters', [EncountersController::class, 'store']);

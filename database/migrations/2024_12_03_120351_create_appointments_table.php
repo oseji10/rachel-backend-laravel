@@ -12,9 +12,36 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('appointments', function (Blueprint $table) {
-            $table->id();
+            $table->ID('appointmentId');
+            $table->unsignedBigInteger('patientId')->nullable();
+            $table->unsignedBigInteger('encounterId')->nullable();
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreign('patientId')->references('patientId')->on('patients')->onDelete('cascade');
+            $table->foreign('encounterId')->references('encounterId')->on('encounters')->onDelete('cascade');
+
         });
+
+
+        Schema::table('encounters', function (Blueprint $table) {
+            $table->unsignedBigInteger('consultingId')->nullable();
+            $table->unsignedBigInteger('continueConsultingId')->nullable();
+            $table->unsignedBigInteger('sketchId')->nullable();
+            $table->unsignedBigInteger('diagnosisId')->nullable();
+            $table->unsignedBigInteger('investigationId')->nullable();
+            $table->unsignedBigInteger('treatmentId')->nullable();
+            $table->unsignedBigInteger('appointmentId')->nullable();
+            $table->unsignedBigInteger('refractionId')->nullable();
+            
+                $table->foreign('consultingId')->references('consultingId')->on('consulting')->onDelete('cascade');
+                $table->foreign('continueConsultingId')->references('continueConsultingId')->on('continue_consulting')->onDelete('cascade');
+                $table->foreign('sketchId')->references('sketchId')->on('sketch')->onDelete('cascade');
+                $table->foreign('diagnosisId')->references('diagnosisId')->on('diagnosis')->onDelete('cascade');
+                $table->foreign('investigationId')->references('investigationId')->on('investigations')->onDelete('cascade');
+                $table->foreign('appointmentId')->references('appointmentId')->on('appointments')->onDelete('cascade');
+                $table->foreign('refractionId')->references('refractionId')->on('refractions')->onDelete('cascade');
+            });
     }
 
     /**

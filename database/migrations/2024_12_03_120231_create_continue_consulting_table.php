@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('continue_consulting', function (Blueprint $table) {
             $table->id('continueConsultingId');
-
+            $table->unsignedBigInteger('patientId')->nullable();
             $table->unsignedBigInteger('encounterId')->nullable();
             $table->text('intraOccularPressureRight')->nullable();
             $table->text('intraOccularPressureLeft')->nullable();
@@ -49,6 +49,7 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
             
+            $table->foreign('patientId')->references('patientId')->on('patients')->onDelete('cascade');
             $table->foreign('encounterId')->references('encounterId')->on('encounters')->onDelete('cascade');
             $table->foreign('chiefComplaintRight')->references('id')->on('chief_complaint')->onDelete('cascade');
             $table->foreign('chiefComplaintLeft')->references('id')->on('chief_complaint')->onDelete('cascade');
@@ -56,19 +57,8 @@ return new class extends Migration
             
         });
 
-        // Schema::table('encounters', function (Blueprint $table) {
-        // $table->unsignedBigInteger('consultingId')->nullable();
-        // $table->unsignedBigInteger('continueConsultingId')->nullable();
-        
-        //     $table->foreign('consultingId')->references('consultingId')->on('consulting')->onDelete('cascade');
-        //     $table->foreign('continueConsultingId')->references('continueConsultingId')->on('continue_consulting')->onDelete('cascade');
-        // });
+    
 
-        Schema::table('consulting', function (Blueprint $table) {
-            $table->unsignedBigInteger('encounterId')->nullable();
-            
-            $table->foreign('encounterId')->references('encounterId')->on('encounters')->onDelete('cascade');
-            });
     }
 
     /**

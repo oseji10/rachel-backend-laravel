@@ -10,6 +10,7 @@ class ContinueConsulting extends Model
     use HasFactory;
     public $table = 'continue_consulting';
     protected $fillable = [
+        'patientId',
         'encounterId',
 'intraOccularPressureRight',
 'intraOccularPressureLeft',
@@ -46,5 +47,10 @@ class ContinueConsulting extends Model
     public function encounters()
     {
         return $this->belongsTo(Encounters::class, 'encounterId', 'encounterId');
+    }
+
+    public function patients()
+    {
+        return $this->hasMany(Patients::class, 'patientId', 'patientId');
     }
 }
