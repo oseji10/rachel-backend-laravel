@@ -13,6 +13,17 @@ class PatientsController extends Controller
         return response()->json($patients); 
     }
 
+    public function retrieveAllPatients()
+    {
+        $patients = Patients::with('doctor')
+            ->orderBy('created_at', 'desc')
+            ->limit(10)
+            ->get(); // Execute the query
+    
+        return response()->json($patients); 
+    }
+    
+
     public function searchPatient(Request $request)
     {
         $query = $request->query('queryParameter'); // Retrieve query parameter

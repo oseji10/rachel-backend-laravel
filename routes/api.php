@@ -84,3 +84,5 @@ Route::post('/encounters', [EncountersController::class, 'store']);
 
 Route::get('/diagnosis', [DiagnosisController::class, 'retrieveAll']);
 Route::post('/diagnosis', [DiagnosisController::class, 'store']);
+
+Route::get('/patients-all', [PatientsController::class, 'retrieveAllPatients']);
