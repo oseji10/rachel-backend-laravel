@@ -9,9 +9,10 @@ class PatientsController extends Controller
 {
     public function RetrieveAll()
     {
-        $patients = Patients::with('doctor')->get();
-        return response()->json($patients); 
+        $patients = Patients::with('doctor')->paginate(15); // 100 records per page
+        return response()->json($patients);
     }
+    
 
     public function retrieveAllPatients()
     {
