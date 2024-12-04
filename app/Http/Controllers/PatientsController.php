@@ -19,6 +19,7 @@ class PatientsController extends Controller
         $patients = Patients::where('hospitalFileNumber', '=', "$query")
             ->orWhere('phoneNumber', '=', "$query")
             ->orWhere('email', '=', "$query")
+            ->orWhere('patientId', '=', "$query")
             ->get();
         return response()->json($patients);
     }
