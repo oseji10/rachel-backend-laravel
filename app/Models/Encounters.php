@@ -9,8 +9,9 @@ class Encounters extends Model
 {
     use HasFactory;
     public $table = 'encounters';
-    protected $fillable = ['patientId', 'consultingId', 'continueConsultingId', 'status'];
+    protected $fillable = ['patientId', 'consultingId', 'continueConsultingId', 'refractionId', 'appointmentId', 'investigationId', 'treatmentId', 'diagnosisId', 'status'];
     protected $primaryKey = 'encounterId';
+
     public function consulting()
     {
         return $this->hasOne(Consulting::class, 'consultingId', 'consultingId');
@@ -19,6 +20,16 @@ class Encounters extends Model
     public function continue_consulting()
     {
         return $this->hasOne(ContinueConsulting::class, 'continueConsultingId', 'continueConsultingId');
+    }
+
+    public function refraction()
+    {
+        return $this->hasOne(Refraction::class, 'refractionId', 'refractionId');
+    }
+
+    public function diagnosis()
+    {
+        return $this->hasOne(Diagnosis::class, 'diagnosisId', 'diagnosisId');
     }
 
     public function patients()

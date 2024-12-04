@@ -16,6 +16,8 @@ use App\Http\Controllers\PatientsController;
 use App\Http\Controllers\ConsultingController;
 use App\Http\Controllers\ContinueConsultingController;
 use App\Http\Controllers\EncountersController;
+use App\Http\Controllers\RefractionController;
+use App\Http\Controllers\DiagnosisController;
 
 
 /*
@@ -74,5 +76,11 @@ Route::post('/consulting', [ConsultingController::class, 'store']);
 Route::get('/continue_consulting', [ContinueConsultingController::class, 'retrieveAll']);
 Route::post('/continue_consulting', [ContinueConsultingController::class, 'store']);
 
+Route::get('/refraction', [RefractionController::class, 'retrieveAll']);
+Route::post('/refraction', [RefractionController::class, 'store']);
+
 Route::get('/encounters', [EncountersController::class, 'retrieveAll']);
 Route::post('/encounters', [EncountersController::class, 'store']);
+
+Route::get('/diagnosis', [DiagnosisController::class, 'retrieveAll']);
+Route::post('/diagnosis', [DiagnosisController::class, 'store']);
