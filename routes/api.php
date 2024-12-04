@@ -66,6 +66,9 @@ Route::post('/doctors', [DoctorsController::class, 'store']);
 Route::get('/patients', [PatientsController::class, 'retrieveAll']);
 Route::get('/patients/search', [PatientsController::class, 'searchPatient']);
 Route::post('/patients', [PatientsController::class, 'store']);
+Route::get('/patients-all', [PatientsController::class, 'retrieveAllPatients']);
+Route::put('/patient/{patientId}', [PatientsController::class, 'update']);
+
 
 Route::get('/users', [UsersController::class, 'retrieveAll']);
 Route::post('/users', [UsersController::class, 'store']);
@@ -85,4 +88,3 @@ Route::post('/encounters', [EncountersController::class, 'store']);
 Route::get('/diagnosis', [DiagnosisController::class, 'retrieveAll']);
 Route::post('/diagnosis', [DiagnosisController::class, 'store']);
 
-Route::get('/patients-all', [PatientsController::class, 'retrieveAllPatients']);

@@ -9,6 +9,7 @@ class Patients extends Model
 {
     use HasFactory;
     public $table = 'patients';
+    protected $primaryKey = 'patientId';
     protected $fillable = ['firstName', 'lastName', 'otherNames', 'phoneNumber', 'email', 'gender', 'bloodGroup', 'address', 'occupation', 'hospitalFileNumber', 'dateOfBirth', 'doctor', 'status'];
 
     public function doctor()

@@ -7,17 +7,27 @@ use App\Models\Patients;
 use App\Models\Doctors;
 class PatientsController extends Controller
 {
-    public function RetrieveAll()
+    public function RetrieveAll(Request $request)
     {
-        $patients = Patients::with('doctor')->paginate(15); // 100 records per page
-        return response()->json($patients);
+        $limit = $request->input('limit'); // Default to 15 if 'limit' is not provided
+        $patients = Patients::with('doctor')->paginate($limit);
+    
+        // Return paginated response with necessary data
+        return response()->json([
+            'data' => $patients->items(),
+            'total' => $patients->total(),
+            'current_page' => $patients->currentPage(),
+            'last_page' => $patients->lastPage(),
+        ]);
     }
+    
+    
     
 
     public function retrieveAllPatients()
     {
         $patients = Patients::with('doctor')
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'asc')
             ->limit(10)
             ->get(); // Execute the query
     
@@ -49,5 +59,32 @@ class PatientsController extends Controller
         return response()->json([ $patients,
         ], 201); // HTTP status code 201: Created
     }
+
+
+    public function update(Request $request, $patientId)
+{
+    // Find the patient by ID
+    $patient = Patients::find($patientId);
+
+    // If the patient doesn't exist, return an error response
+    if (!$patient) {
+        return response()->json([
+            'error' => 'Patient not found',
+        ], 404); // HTTP status code 404: Not Found
+    }
+
+    // Get the data from the request
+    $data = $request->all();
+
+    // Update the patient record
+    $patient->update($data);
+
+    // Return the updated patient record as a response
+    return response()->json([
+        'message' => 'Patient updated successfully',
+        'data' => $patient,
+    ], 200); // HTTP status code 200: OK
+}
+
     
 }
