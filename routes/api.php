@@ -19,6 +19,9 @@ use App\Http\Controllers\EncountersController;
 use App\Http\Controllers\RefractionController;
 use App\Http\Controllers\DiagnosisController;
 use App\Http\Controllers\RolesController;
+use App\Http\Controllers\MedicinesController;
+use App\Http\Controllers\AppointmentsController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -82,8 +85,13 @@ Route::get('/users/front_desks', [UsersController::class, 'front_desk']);
 Route::get('/roles', [RolesController::class, 'retrieveAll']);
 Route::post('/roles', [RolesController::class, 'store']);
 
+Route::get('/appointments', [AppointmentsController::class, 'retrieveAll']);
+Route::post('/appointments', [AppointmentsController::class, 'store']);
+
+
 Route::get('/medicines', [MedicinesController::class, 'retrieveAll']);
 Route::post('/medicines', [MedicinesController::class, 'store']);
+Route::get('/manufacturers', [MedicinesController::class, 'manufacturers']);
 
 Route::get('/consulting', [ConsultingController::class, 'retrieveAll']);
 Route::post('/consulting', [ConsultingController::class, 'store']);

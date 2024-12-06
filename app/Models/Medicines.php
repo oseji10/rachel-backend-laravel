@@ -9,10 +9,10 @@ class Medicines extends Model
 {
     use HasFactory;
     public $table = 'medicines';
-    protected $fillable = ['medicineName','formulation', 'quantity', 'manufacturer', 'status'];
+    protected $fillable = ['medicineName','formulation', 'quantity', 'manufacturer', 'status', 'type'];
 
-    // public function patients()
-    // {
-    //     return $this->hasMany(Patients::class, 'doctor', 'doctorId');
-    // }
+    public function manufacturer()
+    {
+        return $this->belongsTo(Manufacturers::class, 'manufacturer', 'manufacturerId');
+    }
 }

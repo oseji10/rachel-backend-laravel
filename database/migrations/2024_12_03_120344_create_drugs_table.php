@@ -23,6 +23,8 @@ return new class extends Migration
             $table->string('formulation')->nullable();
             $table->string('quantity')->nullable();
             $table->unsignedBigInteger('manufacturer')->nullable();
+            $table->enum('status', ['active', 'disabled'])->default('active')->nullable();
+            $table->string('type')->nullable();
             $table->timestamps();
 
             $table->foreign('manufacturer')->references('manufacturerId')->on('manufacturers')->onDelete('cascade');

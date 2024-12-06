@@ -15,12 +15,16 @@ return new class extends Migration
             $table->ID('appointmentId');
             $table->unsignedBigInteger('patientId')->nullable();
             $table->unsignedBigInteger('encounterId')->nullable();
+            $table->string('appointmentDate')->nullable();
+            $table->unsignedBigInteger('doctor')->nullable();
+            $table->string('comment')->nullable();
+            $table->unsignedBigInteger('createdBy')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('patientId')->references('patientId')->on('patients')->onDelete('cascade');
             $table->foreign('encounterId')->references('encounterId')->on('encounters')->onDelete('cascade');
-
+            $table->foreign('createdBy')->references('id')->on('users')->onDelete('cascade');
         });
 
 
