@@ -13,6 +13,13 @@ class Users extends Model
         'phoneNumber',
         'email',
         'role',
+        'firstName',
+        'lastName',
+        'password'
     ];
 
+    public function role()
+    {
+        return $this->hasOne(Roles::class, 'roleId', 'role'); // Assuming doctorId is the foreign key
+    }
 }

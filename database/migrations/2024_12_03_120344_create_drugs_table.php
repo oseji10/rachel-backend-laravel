@@ -11,9 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('drugs', function (Blueprint $table) {
-            $table->id();
+        Schema::create('manufacturers', function (Blueprint $table) {
+            $table->id('manufacturerId');
+            $table->string('manufacturerName')->nullable();
             $table->timestamps();
+        });
+
+        Schema::create('medicines', function (Blueprint $table) {
+            $table->id('medicineId');
+            $table->string('medicineName')->nullable();
+            $table->string('formulation')->nullable();
+            $table->string('quantity')->nullable();
+            $table->unsignedBigInteger('manufacturer')->nullable();
+            $table->timestamps();
+
+            $table->foreign('manufacturer')->references('manufacturerId')->on('manufacturers')->onDelete('cascade');
         });
     }
 

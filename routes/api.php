@@ -18,7 +18,7 @@ use App\Http\Controllers\ContinueConsultingController;
 use App\Http\Controllers\EncountersController;
 use App\Http\Controllers\RefractionController;
 use App\Http\Controllers\DiagnosisController;
-
+use App\Http\Controllers\RolesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,6 +72,18 @@ Route::put('/patient/{patientId}', [PatientsController::class, 'update']);
 
 Route::get('/users', [UsersController::class, 'retrieveAll']);
 Route::post('/users', [UsersController::class, 'store']);
+Route::get('/users/doctors', [UsersController::class, 'doctors']);
+Route::get('/users/nurses', [UsersController::class, 'nurses']);
+Route::get('/users/clinic_receptionists', [UsersController::class, 'clinic_receptionists']);
+Route::get('/users/workshop_receptionists', [UsersController::class, 'workshop_receptionists']);
+Route::get('/users/front_desks', [UsersController::class, 'front_desk']);
+
+
+Route::get('/roles', [RolesController::class, 'retrieveAll']);
+Route::post('/roles', [RolesController::class, 'store']);
+
+Route::get('/medicines', [MedicinesController::class, 'retrieveAll']);
+Route::post('/medicines', [MedicinesController::class, 'store']);
 
 Route::get('/consulting', [ConsultingController::class, 'retrieveAll']);
 Route::post('/consulting', [ConsultingController::class, 'store']);
