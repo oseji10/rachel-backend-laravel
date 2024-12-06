@@ -9,7 +9,7 @@ class AppointmentsController extends Controller
 {
     public function RetrieveAll()
     {
-        $appointments = Appointments::all();
+        $appointments = Appointments::with('patients', 'encounters', 'doctors')->get();
         return response()->json($appointments);
        
     }
