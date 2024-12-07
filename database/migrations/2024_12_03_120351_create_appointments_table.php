@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('patientId')->nullable();
             $table->unsignedBigInteger('encounterId')->nullable();
             $table->string('appointmentDate')->nullable();
+            $table->string('appointmentTime')->nullable();
             $table->unsignedBigInteger('doctor')->nullable();
             $table->string('comment')->nullable();
             $table->unsignedBigInteger('createdBy')->nullable();
@@ -28,24 +29,24 @@ return new class extends Migration
         });
 
 
-        Schema::table('encounters', function (Blueprint $table) {
-            $table->unsignedBigInteger('consultingId')->nullable();
-            $table->unsignedBigInteger('continueConsultingId')->nullable();
-            $table->unsignedBigInteger('sketchId')->nullable();
-            $table->unsignedBigInteger('diagnosisId')->nullable();
-            $table->unsignedBigInteger('investigationId')->nullable();
-            $table->unsignedBigInteger('treatmentId')->nullable();
-            $table->unsignedBigInteger('appointmentId')->nullable();
-            $table->unsignedBigInteger('refractionId')->nullable();
+        // Schema::table('encounters', function (Blueprint $table) {
+        //     $table->unsignedBigInteger('consultingId')->nullable();
+        //     $table->unsignedBigInteger('continueConsultingId')->nullable();
+        //     $table->unsignedBigInteger('sketchId')->nullable();
+        //     $table->unsignedBigInteger('diagnosisId')->nullable();
+        //     $table->unsignedBigInteger('investigationId')->nullable();
+        //     $table->unsignedBigInteger('treatmentId')->nullable();
+        //     $table->unsignedBigInteger('appointmentId')->nullable();
+        //     $table->unsignedBigInteger('refractionId')->nullable();
             
-                $table->foreign('consultingId')->references('consultingId')->on('consulting')->onDelete('cascade');
-                $table->foreign('continueConsultingId')->references('continueConsultingId')->on('continue_consulting')->onDelete('cascade');
-                $table->foreign('sketchId')->references('sketchId')->on('sketch')->onDelete('cascade');
-                $table->foreign('diagnosisId')->references('diagnosisId')->on('diagnosis')->onDelete('cascade');
-                $table->foreign('investigationId')->references('investigationId')->on('investigations')->onDelete('cascade');
-                $table->foreign('appointmentId')->references('appointmentId')->on('appointments')->onDelete('cascade');
-                $table->foreign('refractionId')->references('refractionId')->on('refractions')->onDelete('cascade');
-            });
+        //         $table->foreign('consultingId')->references('consultingId')->on('consulting')->onDelete('cascade');
+        //         $table->foreign('continueConsultingId')->references('continueConsultingId')->on('continue_consulting')->onDelete('cascade');
+        //         $table->foreign('sketchId')->references('sketchId')->on('sketch')->onDelete('cascade');
+        //         $table->foreign('diagnosisId')->references('diagnosisId')->on('diagnosis')->onDelete('cascade');
+        //         $table->foreign('investigationId')->references('investigationId')->on('investigations')->onDelete('cascade');
+        //         $table->foreign('appointmentId')->references('appointmentId')->on('appointments')->onDelete('cascade');
+        //         $table->foreign('refractionId')->references('refractionId')->on('refractions')->onDelete('cascade');
+        //     });
     }
 
     /**
