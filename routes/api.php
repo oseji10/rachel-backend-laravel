@@ -87,6 +87,9 @@ Route::post('/roles', [RolesController::class, 'store']);
 
 Route::get('/appointments', [AppointmentsController::class, 'retrieveAll']);
 Route::post('/appointments', [AppointmentsController::class, 'store']);
+// Route::put('/appointments', [AppointmentsController::class, 'updateAppointment']);
+Route::delete('/appointments/{appointmentId}', [AppointmentsController::class, 'deleteAppointment']);
+Route::put('/appointments/{appointmentId}', [AppointmentsController::class, 'updateAppointment']);
 
 
 Route::get('/medicines', [MedicinesController::class, 'retrieveAll']);

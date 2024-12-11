@@ -9,6 +9,7 @@ class Appointments extends Model
 {
     use HasFactory;
     public $table = 'appointments';
+    protected $primaryKey = 'appointmentId';
     protected $fillable = ['appointmentId','patientId', 'encounterId', 'appointmentDate', 'appointmentTime', 'doctor', 'comment', 'createdBy'];
 
     public function patients()

@@ -26,4 +26,31 @@ class AppointmentsController extends Controller
         return response()->json($appointments, 201); 
     }
     
+
+    // Update appointment 
+    public function updateAppointment(Request $request, $appointmentId)
+{
+    $appointment = Appointments::find($appointmentId);
+    if (!$appointment) {
+        return response()->json([
+            'error' => 'Appointment not found',
+        ], 404);
+    }
+    $data = $request->all();
+    $appointment->update($data);
+    return response()->json([
+        'message' => 'Appointment updated successfully',
+        'data' => $appointment,
+    ], 200); 
+}
+
+
+// Delete appointment
+    public function deleteAppointment($appointmentId){
+        $appointment = Appointments::find($appointmentId);
+if ($appointment) {
+    $appointment->delete();
+}
+return response()->json($appointment, 201);
+    }
 }
