@@ -9,7 +9,7 @@ class MedicinesController extends Controller
 {
     public function RetrieveAll()
     {
-        $medicines = Medicines::all();
+        $medicines = Medicines::with('manufacturer')->get();
         return response()->json($medicines);
        
     }

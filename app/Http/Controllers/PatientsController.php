@@ -95,5 +95,13 @@ class PatientsController extends Controller
     ], 200); // HTTP status code 200: OK
 }
 
+// Delete Patient
+public function deletePatient($patientId){
+    $patient = Patients::find($patientId);
+if ($patient) {
+$patient->delete();
+}
+return response()->json($patient, 201);
+}
     
 }

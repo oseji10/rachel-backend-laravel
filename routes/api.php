@@ -71,6 +71,7 @@ Route::get('/patients/search', [PatientsController::class, 'searchPatient']);
 Route::post('/patients', [PatientsController::class, 'store']);
 Route::get('/patients-all', [PatientsController::class, 'retrieveAllPatients']);
 Route::put('/patient/{patientId}', [PatientsController::class, 'update']);
+Route::delete('/patient/{patientId}', [PatientsController::class, 'deletePatient']);
 
 
 Route::get('/users', [UsersController::class, 'retrieveAll']);
@@ -80,6 +81,8 @@ Route::get('/users/nurses', [UsersController::class, 'nurses']);
 Route::get('/users/clinic_receptionists', [UsersController::class, 'clinic_receptionists']);
 Route::get('/users/workshop_receptionists', [UsersController::class, 'workshop_receptionists']);
 Route::get('/users/front_desks', [UsersController::class, 'front_desk']);
+Route::delete('/user/{id}', [UsersController::class, 'deleteUser']);
+Route::put('/user/{id}', [UsersController::class, 'updateUser']);
 
 
 Route::get('/roles', [RolesController::class, 'retrieveAll']);

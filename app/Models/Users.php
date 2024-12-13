@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Users extends Model
 {
     use HasFactory;
+    use SoftDeletes;
     public $table = 'users';
     protected $fillable = [
         'phoneNumber',
@@ -17,6 +19,7 @@ class Users extends Model
         'lastName',
         'password'
     ];
+    protected $dates = ['deleted_at'];
 
     public function role()
     {

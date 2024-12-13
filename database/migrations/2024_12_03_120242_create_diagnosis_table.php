@@ -22,6 +22,10 @@ return new class extends Migration
             $table->foreign('patientId')->references('patientId')->on('patients')->onDelete('cascade');
             $table->foreign('encounterId')->references('encounterId')->on('encounters')->onDelete('cascade');
 
+            $table->foreign('diagnosisRight')->references('id')->on('diagnosis_list')->onDelete('cascade');
+            $table->foreign('diagnosisLeft')->references('id')->on('diagnosis_list')->onDelete('cascade');
+
+
         });
     }
 

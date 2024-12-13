@@ -75,6 +75,35 @@ class UsersController extends Controller
    
 }
 
- 
+
+
+public function updateUser(Request $request, $id)
+{
+    // Find the patient by ID
+    $user = Users::find($id);
+    if (!$user) {
+        return response()->json([
+            'error' => 'User not found',
+        ], 404); 
+    }
+
+    $data = $request->all();
+    $user->update($data);
+
+    return response()->json([
+        'message' => 'User updated successfully',
+        'data' => $user,
+    ], 200); 
+}
+
+
+ // Delete User
+public function deleteUser($id){
+    $user = Users::find($id);
+if ($user) {
+$user->delete();
+}
+return response()->json($user, 201);
+}
     
 }

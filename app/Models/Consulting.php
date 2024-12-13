@@ -31,4 +31,15 @@ class Consulting extends Model
     {
         return $this->hasMany(Patients::class, 'patientId', 'patientId');
     }
+
+    public function visualAcuityFarPresentingRight()
+    {
+        return $this->belongsTo(VisualAcuityFar::class, 'visualAcuityFarPresentingRight', 'id');
+    }
+
+
+    public function visualAcuityFarPresentingLeft()
+    {
+        return $this->belongsTo(VisualAcuityFar::class, 'visualAcuityFarPresentingLeft', 'id');
+    }
 }
