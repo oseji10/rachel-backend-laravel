@@ -15,6 +15,15 @@ return new class extends Migration
             $table->id('treatmentId');
             $table->unsignedBigInteger('patientId')->nullable();
             $table->unsignedBigInteger('encounterId')->nullable();
+            $table->string('treatmentType')->nullable();
+            $table->string('dosage')->nullable();
+            $table->string('doseDuration')->nullable();
+            $table->string('doseInterval')->nullable();
+            $table->string('time')->nullable();
+            $table->string('comment')->nullable();
+            $table->string('lensType')->nullable();
+            $table->string('costOfLens')->nullable();
+            $table->string('costOfFrame')->nullable();
             $table->timestamps();
 
             $table->foreign('patientId')->references('patientId')->on('patients')->onDelete('cascade');

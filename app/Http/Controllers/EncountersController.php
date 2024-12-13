@@ -89,6 +89,25 @@ class EncountersController extends Controller
             'diagnosis_right.name as diagnosisRight', 
             'diagnosis_left.name as diagnosisLeft',
             
+            'investigations.investigationsRequired',  
+            'investigations.externalInvestigationRequired', 
+            'investigations.investigationsDone',
+            'investigations.HBP', 
+            'investigations.diabetes',  
+            'investigations.pregnancy',  
+            'investigations.drugAllergy',  
+            'investigations.currentMedication',  
+            'uploaded_document_url.fileUrl as documentId',
+
+            'treatment.treatmentType',  
+            'treatment.dosage', 
+            'treatment.doseDuration',
+            'treatment.doseInterval', 
+            'treatment.time',  
+            'treatment.comment',  
+            'treatment.lensType',  
+            'treatment.costOfLens',
+            'treatment.costOfFrame'
          
         )
         ->leftjoin('patients', 'patients.patientId', '=', 'encounters.patientId')
@@ -96,6 +115,8 @@ class EncountersController extends Controller
         ->leftjoin('continue_consulting', 'continue_consulting.continueConsultingId', '=', 'encounters.continueConsultingId')
         ->leftjoin('refractions', 'refractions.refractionId', '=', 'encounters.refractionId')
         ->leftjoin('diagnosis', 'diagnosis.diagnosisId', '=', 'encounters.diagnosisId')
+        ->leftjoin('investigations', 'investigations.investigationId', '=', 'encounters.investigationId')
+        ->leftjoin('treatment', 'treatment.treatmentId', '=', 'encounters.treatmentId')
 
         ->leftJoin('visual_acuity_far as visual_acuity_far_right', 'visual_acuity_far_right.id', '=', 'consulting.visualAcuityFarPresentingRight')
         ->leftJoin('visual_acuity_far as visual_acuity_far_left', 'visual_acuity_far_left.id', '=', 'consulting.visualAcuityFarPresentingLeft')
@@ -108,7 +129,8 @@ class EncountersController extends Controller
         
         ->leftJoin('chief_complaint as chief_complaint_right', 'chief_complaint_right.id', '=', 'continue_consulting.chiefComplaintRight')
         ->leftJoin('chief_complaint as chief_complaint_left', 'chief_complaint_left.id', '=', 'continue_consulting.chiefComplaintLeft')
-        
+        ->leftJoin('document_upload as uploaded_document_url', 'uploaded_document_url.documentId', '=', 'investigations.documentId')
+
         
 ->leftJoin('diagnosis_list as diagnosis_right', 'diagnosis_right.id', '=', 'diagnosis.diagnosisRight')
 ->leftJoin('diagnosis_list as diagnosis_left', 'diagnosis_left.id', '=', 'diagnosis.diagnosisLeft')
