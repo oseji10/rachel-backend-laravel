@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Appointments;
+use App\Models\Encounters;
 use App\Models\Manufacturers;
 class AppointmentsController extends Controller
 {
@@ -24,6 +25,28 @@ class AppointmentsController extends Controller
     
        
         return response()->json($appointments, 201); 
+    }
+
+
+    public function createEncounterAppointment(Request $request)
+    {
+        // Retrieve all data from the request
+        $data = $request->all();
+    
+        // Create a new Appointments record
+        $appointment = Appointments::create($data);
+    
+        
+        $encounter = Encounters::where('encounterId', $request->encounterId)->first();
+    
+        if ($encounter) {
+            $encounter->update([
+                'appointmentId' => $appointment->appointmentId, // Assuming id is the primary key of ContinueConsulting
+            ]);
+    
+        }
+    
+        return response()->json(['encounterId' =>$encounter->encounterId], 201);// HTTP status code 201: Created
     }
     
 

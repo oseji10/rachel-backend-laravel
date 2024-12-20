@@ -53,4 +53,14 @@ class ContinueConsulting extends Model
     {
         return $this->hasMany(Patients::class, 'patientId', 'patientId');
     }
+
+    public function chiefComplaintRight()
+    {
+        return $this->belongsTo(ChiefComplaint::class, 'chiefComplaintRight');
+    }
+
+    public function chiefComplaintLeft()
+    {
+        return $this->belongsTo(ChiefComplaint::class, 'chiefComplaintLeft');
+    }
 }

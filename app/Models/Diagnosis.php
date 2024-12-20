@@ -25,4 +25,14 @@ class Diagnosis extends Model
     {
         return $this->hasMany(Patients::class, 'patientId', 'patientId');
     }
+
+    public function diagnosisRightDetails()
+    {
+        return $this->belongsTo(DiagnosisList::class, 'diagnosisRight');
+    }
+
+    public function diagnosisLeftDetails()
+    {
+        return $this->belongsTo(DiagnosisList::class, 'diagnosisLeft');
+    }
 }

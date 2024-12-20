@@ -9,7 +9,7 @@ class Encounters extends Model
 {
     use HasFactory;
     public $table = 'encounters';
-    protected $fillable = ['patientId', 'consultingId', 'continueConsultingId', 'refractionId', 'appointmentId', 'investigationId', 'treatmentId', 'diagnosisId', 'status'];
+    protected $fillable = ['patientId', 'consultingId', 'continueConsultingId', 'refractionId', 'appointmentId', 'investigationId', 'treatmentId', 'diagnosisId', 'sketchId', 'status'];
     protected $primaryKey = 'encounterId';
 
     public function consulting()
@@ -17,17 +17,17 @@ class Encounters extends Model
         return $this->hasOne(Consulting::class, 'consultingId', 'consultingId');
     }
 
-    public function continue_consulting()
+    public function continueConsulting()
     {
         return $this->hasOne(ContinueConsulting::class, 'continueConsultingId', 'continueConsultingId');
     }
 
-    public function refraction()
+    public function refractions()
     {
         return $this->hasOne(Refraction::class, 'refractionId', 'refractionId');
     }
 
-    public function diagnosis()
+    public function diagnoses()
     {
         return $this->hasOne(Diagnosis::class, 'diagnosisId', 'diagnosisId');
     }
@@ -35,5 +35,26 @@ class Encounters extends Model
     public function patients()
     {
         return $this->hasOne(Patients::class, 'patientId', 'patientId');
+    }
+
+    public function sketches()
+    {
+        return $this->hasOne(Sketch::class, 'encounterId');
+    }
+
+
+    public function appointments()
+    {
+        return $this->hasOne(Appointments::class, 'encounterId');
+    }
+
+    public function investigations()
+    {
+        return $this->hasOne(Investigation::class, 'encounterId');
+    }
+
+    public function treatments()
+    {
+        return $this->hasOne(Treatment::class, 'encounterId');
     }
 }

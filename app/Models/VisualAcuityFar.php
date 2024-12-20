@@ -10,4 +10,9 @@ class VisualAcuityFar extends Model
     use HasFactory;
     public $table = 'visual_acuity_far';
     protected $fillable = ['name', 'status'];
+
+    public function consulting()
+    {
+        return $this->hasMany(Consulting::class, 'visualAcuityFarPresentingRight');
+    }
 }

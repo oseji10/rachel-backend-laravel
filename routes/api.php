@@ -21,7 +21,9 @@ use App\Http\Controllers\DiagnosisController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\MedicinesController;
 use App\Http\Controllers\AppointmentsController;
-
+use App\Http\Controllers\SketchController;
+use App\Http\Controllers\TreatmentController;
+use App\Http\Controllers\InvestigationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -90,7 +92,7 @@ Route::post('/roles', [RolesController::class, 'store']);
 
 Route::get('/appointments', [AppointmentsController::class, 'retrieveAll']);
 Route::post('/appointments', [AppointmentsController::class, 'store']);
-// Route::put('/appointments', [AppointmentsController::class, 'updateAppointment']);
+Route::post('/encounter-appointment', [AppointmentsController::class, 'createEncounterAppointment']);
 Route::delete('/appointments/{appointmentId}', [AppointmentsController::class, 'deleteAppointment']);
 Route::put('/appointments/{appointmentId}', [AppointmentsController::class, 'updateAppointment']);
 
@@ -114,3 +116,8 @@ Route::post('/encounters', [EncountersController::class, 'store']);
 Route::get('/diagnosis', [DiagnosisController::class, 'retrieveAll']);
 Route::post('/diagnosis', [DiagnosisController::class, 'store']);
 
+Route::post('/sketch', [SketchController::class, 'saveSketches']);
+
+Route::post('/treatment', [TreatmentController::class, 'saveTreatments']);
+
+Route::post('/investigations', [InvestigationController::class, 'store']);

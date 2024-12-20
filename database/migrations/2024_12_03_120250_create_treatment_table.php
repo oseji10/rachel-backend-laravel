@@ -12,15 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('treatment', function (Blueprint $table) {
-            $table->id('treatmentId');
+            $table->id();
+            $table->bigInteger('treatmentId')->nullable();
+
             $table->unsignedBigInteger('patientId')->nullable();
             $table->unsignedBigInteger('encounterId')->nullable();
             $table->string('treatmentType')->nullable();
+            $table->string('medicine')->nullable();
             $table->string('dosage')->nullable();
             $table->string('doseDuration')->nullable();
             $table->string('doseInterval')->nullable();
             $table->string('time')->nullable();
             $table->string('comment')->nullable();
+            $table->string('frame')->nullable();
             $table->string('lensType')->nullable();
             $table->string('costOfLens')->nullable();
             $table->string('costOfFrame')->nullable();
@@ -30,6 +34,14 @@ return new class extends Migration
             $table->foreign('encounterId')->references('encounterId')->on('encounters')->onDelete('cascade');
 
         });
+
+
+        Schema::table('encounters', function (Blueprint $table) {
+            // $table->dropForeign(['treatmentId']);
+            // $table->dropColumn('treatmentId');
+            $table->bigInteger('treatmentId')->nullable();
+            // $table->foreign('treatmentId')->references('id')->on('treatment')->onDelete('cascade');
+            });
     }
 
     /**
