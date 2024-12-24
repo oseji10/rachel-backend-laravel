@@ -20,6 +20,7 @@ class PatientsController extends Controller
                     ->orWhere('phoneNumber', 'like', "%{$searchQuery}%")
                     ->orWhere('email', 'like', "%{$searchQuery}%");
             })
+            ->orderBy('patientId', 'desc')
             ->paginate($limit);
     
         return response()->json([
