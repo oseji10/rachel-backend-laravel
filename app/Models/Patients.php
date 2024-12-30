@@ -11,12 +11,18 @@ class Patients extends Model
     use SoftDeletes;
     public $table = 'patients';
     protected $primaryKey = 'patientId';
-    protected $fillable = ['firstName', 'lastName', 'otherNames', 'phoneNumber', 'email', 'gender', 'bloodGroup', 'address', 'occupation', 'hospitalFileNumber', 'dateOfBirth', 'doctor', 'status'];
+    protected $fillable = ['firstName', 'lastName', 'otherNames', 'phoneNumber', 'email', 'gender', 'bloodGroup', 'address', 'occupation', 'hospitalFileNumber', 'dateOfBirth', 'doctor', 'status', 'hmoId'];
     protected $dates = ['deleted_at'];
 
 
     public function doctor()
     {
-        return $this->belongsTo(Doctors::class, 'doctor', 'doctorId'); // Assuming doctorId is the foreign key
+        return $this->belongsTo(Doctors::class, 'doctor', 'doctorId'); 
     }
+
+    public function hmo()
+    {
+        return $this->belongsTo(HMOs::class, 'hmoId', 'hmoId'); 
+    }
+
 }

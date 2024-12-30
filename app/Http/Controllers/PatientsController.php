@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Patients;
 use App\Models\Doctors;
+use App\Models\HMOs;
 class PatientsController extends Controller
 {
     public function RetrieveAll(Request $request)
@@ -12,13 +13,15 @@ class PatientsController extends Controller
         $limit = $request->input('limit', 10);
         $searchQuery = $request->input('query');
         
-        $patients = Patients::with('doctor')
+        $patients = Patients::with('doctor', 'hmo')
             ->when($searchQuery, function ($query, $searchQuery) {
                 $query->where('firstName', 'like', "%{$searchQuery}%")
                     ->orWhere('lastName', 'like', "%{$searchQuery}%")
                     ->orWhere('otherNames', 'like', "%{$searchQuery}%")
                     ->orWhere('phoneNumber', 'like', "%{$searchQuery}%")
-                    ->orWhere('email', 'like', "%{$searchQuery}%");
+                    ->orWhere('email', 'like', "%{$searchQuery}%")
+                    ->orWhereRaw("CONCAT(firstName, ' ', lastName) LIKE ?", ["%{$searchQuery}%"])
+                    ->orWhereRaw("CONCAT(firstName, ' ', lastName, ' ', otherNames) LIKE ?", ["%{$searchQuery}%"]);
             })
             ->orderBy('patientId', 'desc')
             ->paginate($limit);
@@ -37,7 +40,7 @@ class PatientsController extends Controller
 
     public function retrieveAllPatients()
     {
-        $patients = Patients::with('doctor')
+        $patients = Patients::with('doctor', 'hmo')
             ->orderBy('created_at', 'asc')
             ->limit(10)
             ->get(); 

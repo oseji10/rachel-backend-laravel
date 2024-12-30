@@ -1,5 +1,5 @@
 <?php
-
+use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\VisualAcuityFarController;
@@ -24,6 +24,8 @@ use App\Http\Controllers\AppointmentsController;
 use App\Http\Controllers\SketchController;
 use App\Http\Controllers\TreatmentController;
 use App\Http\Controllers\InvestigationController;
+use App\Http\Controllers\HMOsController;
+use App\Http\Controllers\ManufacturersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,6 +70,9 @@ Route::post('/chief_complaint', [ChiefComplaintController::class, 'store']);
 Route::get('/doctors', [DoctorsController::class, 'retrieveAll']);
 Route::post('/doctors', [DoctorsController::class, 'store']);
 
+Route::get('/hmos', [HMOsController::class, 'retrieveAll']);
+Route::post('/hmos', [HMOsController::class, 'store']);
+
 Route::get('/patients', [PatientsController::class, 'retrieveAll']);
 Route::get('/patients/search', [PatientsController::class, 'searchPatient']);
 Route::post('/patients', [PatientsController::class, 'store']);
@@ -99,7 +104,9 @@ Route::put('/appointments/{appointmentId}', [AppointmentsController::class, 'upd
 
 Route::get('/medicines', [MedicinesController::class, 'retrieveAll']);
 Route::post('/medicines', [MedicinesController::class, 'store']);
-Route::get('/manufacturers', [MedicinesController::class, 'manufacturers']);
+
+Route::get('/manufacturers', [ManufacturersController::class, 'retrieveAll']);
+Route::post('/manufacturers', [ManufacturersController::class, 'store']);
 
 Route::get('/consulting', [ConsultingController::class, 'retrieveAll']);
 Route::post('/consulting', [ConsultingController::class, 'store']);
@@ -121,3 +128,9 @@ Route::post('/sketch', [SketchController::class, 'saveSketches']);
 Route::post('/treatment', [TreatmentController::class, 'saveTreatments']);
 
 Route::post('/investigations', [InvestigationController::class, 'store']);
+
+
+
+Route::post('/login', [AuthController::class, 'login']);
+Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'user']);
+Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
