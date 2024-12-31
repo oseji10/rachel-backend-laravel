@@ -1,8 +1,10 @@
 <?php
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
+use App\Models\Users;
+use App\Models\Doctors;
 
 class AuthController extends Controller
 {
@@ -44,23 +46,37 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|string|min:8|confirmed',
+        // Set default password
+        $default_password = "password";
+    
+        // Create user
+        $user = Users::create([
+            'firstName' => $request->firstName,
+            'lastName' => $request->lastName,
+            'phoneNumber' => $request->phoneNumber,
+            'email' => $request->email,
+            'password' => Hash::make($default_password),
+            'role' => $request->role,
         ]);
-
-        $user = User::create([
-            'name' => $validatedData['name'],
-            'email' => $validatedData['email'],
-            'password' => Hash::make($validatedData['password']),
-        ]);
-
-        $token = $user->createToken('authToken')->plainTextToken;
-
+    
+        // Check if role is 4 (Doctor)
+        if ($request->role == 4) {
+            // Concatenate firstName and lastName for doctorName
+            $doctorName = $request->firstName . ' ' . $request->lastName;
+    
+            // Create doctor entry
+            Doctors::create([
+                'doctorName' => $doctorName,
+                'department' => 'Opthalmology',
+                'title' => 'Dr.',
+                'userId' => $user->id,
+            ]);
+        }
+    
+        // Return response
         return response()->json([
-            'user' => $user,
-            'token' => $token,
+            'message' => "User successfully created",
         ]);
     }
+    
 }
