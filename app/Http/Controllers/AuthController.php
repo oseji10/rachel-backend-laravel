@@ -96,6 +96,10 @@ class AuthController extends Controller
         }
 
         // Update the user's password
+        $user->email = $request->email;
+        $user->phoneNumber = $request->phoneNumber;
+        $user->firstName = $request->firstName;
+        $user->lastName = $request->lastName;
         $user->password = Hash::make($request->newPassword);
         $user->save();
 

@@ -26,7 +26,7 @@ use App\Http\Controllers\TreatmentController;
 use App\Http\Controllers\InvestigationController;
 use App\Http\Controllers\HMOsController;
 use App\Http\Controllers\ManufacturersController;
-
+use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -136,3 +136,6 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'user']);
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 Route::middleware('auth:sanctum')->post('/change-password', [AuthController::class, 'changePassword']);
+
+
+Route::get('/sanctum/csrf-cookie', [CsrfCookieController::class, 'show']);
