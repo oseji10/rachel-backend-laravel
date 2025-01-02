@@ -81,29 +81,66 @@ class AuthController extends Controller
 
 
     public function changePassword(Request $request)
-    {
-        // Validate input
-        $request->validate([
-            'currentPassword' => 'required',
-            'newPassword' => 'required|min:6|confirmed', // 'confirmed' ensures newPassword_confirmation is also sent
-        ]);
+{
+    // Validate input
+    $request->validate([
+        'currentPassword' => 'required',
+        'newPassword' => 'required|min:6', // 'confirmed' ensures newPassword_confirmation is also sent
+    ]);
 
-        $user = Auth::user();
+    $user = Auth::user();
 
-        // Check if the current password matches
-        if (!Hash::check($request->currentPassword, $user->password)) {
-            return response()->json(['message' => 'Current password is incorrect.'], 422);
-        }
-
-        // Update the user's password
-        $user->email = $request->email;
-        $user->phoneNumber = $request->phoneNumber;
-        $user->firstName = $request->firstName;
-        $user->lastName = $request->lastName;
-        $user->password = Hash::make($request->newPassword);
-        $user->save();
-
-        return response()->json(['message' => 'Password changed successfully.']);
+    // Check if the current password matches
+    if (!Hash::check($request->currentPassword, $user->password)) {
+        return response()->json(['message' => 'Current password is incorrect.'], 422);
     }
+
+    // // Only update the fields if they are provided
+    // if ($request->has('email')) {
+    //     $user->email = $request->email;
+    // }
+    // if ($request->has('phoneNumber')) {
+    //     $user->phoneNumber = $request->phoneNumber;
+    // }
+    // if ($request->has('firstName')) {
+    //     $user->firstName = $request->firstName;
+    // }
+    // if ($request->has('lastName')) {
+    //     $user->lastName = $request->lastName;
+    // }
+
+    // Update the user's password
+    $user->password = Hash::make($request->newPassword);
+    $user->save();
+
+    return response()->json(['message' => 'Password changed successfully.']);
+}
+
+
+
+public function updateProfile(Request $request)
+{
+    // Find the patient by ID
+    $user = Users::where('email', $request->email)->first();
+
+    
+    if (!$user) {
+        return response()->json([
+            'error' => 'User not found',
+        ], 404); // HTTP status code 404: Not Found
+    }
+
+    
+    $data = $request->all();
+
+    
+    $user->update($data);
+
+    
+    return response()->json([
+        'message' => 'User updated successfully',
+        'data' => $user,
+    ], 200); // HTTP status code 200: OK
+}
     
 }

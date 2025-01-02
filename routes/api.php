@@ -136,6 +136,7 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'user']);
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 Route::middleware('auth:sanctum')->post('/change-password', [AuthController::class, 'changePassword']);
+Route::put('/update-profile', [AuthController::class, 'updateProfile']);
 
 
 Route::get('/sanctum/csrf-cookie', [CsrfCookieController::class, 'show']);
