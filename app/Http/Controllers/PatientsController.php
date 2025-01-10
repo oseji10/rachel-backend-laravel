@@ -41,7 +41,7 @@ class PatientsController extends Controller
     public function retrieveAllPatients()
     {
         $patients = Patients::with('doctor', 'hmo')
-            ->orderBy('created_at', 'asc')
+            ->orderBy('created_at', 'desc')
             ->limit(10)
             ->get(); 
             return response()->json($patients); 
