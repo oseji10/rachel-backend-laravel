@@ -19,6 +19,8 @@ class PatientsController extends Controller
                     ->orWhere('lastName', 'like', "%{$searchQuery}%")
                     ->orWhere('otherNames', 'like', "%{$searchQuery}%")
                     ->orWhere('phoneNumber', 'like', "%{$searchQuery}%")
+                    ->orWhere('patientId', 'like', "%{$searchQuery}%")
+                    ->orWhere('hospitalFileNumber', 'like', "%{$searchQuery}%")
                     ->orWhere('email', 'like', "%{$searchQuery}%")
                     ->orWhereRaw("CONCAT(firstName, ' ', lastName) LIKE ?", ["%{$searchQuery}%"])
                     ->orWhereRaw("CONCAT(firstName, ' ', lastName, ' ', otherNames) LIKE ?", ["%{$searchQuery}%"]);
