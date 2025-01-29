@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('manufacturers', function (Blueprint $table) {
-            $table->id('manufacturerId');
-            $table->string('manufacturerName')->nullable();
-            $table->timestamps();
-        });
+        // Schema::create('manufacturers', function (Blueprint $table) {
+        //     $table->id('manufacturerId');
+        //     $table->string('manufacturerName')->nullable();
+        //     $table->timestamps();
+        // });
 
         Schema::create('medicines', function (Blueprint $table) {
             $table->id('medicineId');
@@ -25,6 +25,7 @@ return new class extends Migration
             $table->unsignedBigInteger('manufacturer')->nullable();
             $table->enum('status', ['active', 'disabled'])->default('active')->nullable();
             $table->string('type')->nullable();
+            $table->string('price')->nullable();
             $table->timestamps();
 
             $table->foreign('manufacturer')->references('manufacturerId')->on('manufacturers')->onDelete('cascade');

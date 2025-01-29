@@ -104,9 +104,13 @@ Route::put('/appointments/{appointmentId}', [AppointmentsController::class, 'upd
 
 Route::get('/medicines', [MedicinesController::class, 'retrieveAll']);
 Route::post('/medicines', [MedicinesController::class, 'store']);
+Route::put('/medicines/{medicineId}', [MedicinesController::class, 'update']);
+Route::delete('/medicines/{medicineId}', [MedicinesController::class, 'deleteMedicine']);
 
 Route::get('/manufacturers', [ManufacturersController::class, 'retrieveAll']);
 Route::post('/manufacturers', [ManufacturersController::class, 'store']);
+Route::put('/manufacturers/{manufacturerId}', [ManufacturersController::class, 'update']);
+Route::delete('/manufacturers/{manufacturerId}', [ManufacturersController::class, 'deleteManufacturer']);
 
 Route::get('/consulting', [ConsultingController::class, 'retrieveAll']);
 Route::post('/consulting', [ConsultingController::class, 'store']);

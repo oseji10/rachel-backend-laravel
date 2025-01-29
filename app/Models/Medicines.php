@@ -9,7 +9,7 @@ class Medicines extends Model
 {
     use HasFactory;
     public $table = 'medicines';
-    protected $fillable = ['medicineName','formulation', 'quantity', 'manufacturer', 'status', 'type'];
+    protected $fillable = ['medicineName','formulation', 'quantity', 'manufacturer', 'status', 'type', 'price'];
 
     public function manufacturer()
     {

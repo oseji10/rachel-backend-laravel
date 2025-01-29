@@ -27,5 +27,34 @@ class ManufacturersController extends Controller
        
         return response()->json($manufacturers, 201); 
     }
+
+
+    public function update(Request $request, $manufacturerId)
+    {
+        // Find the medicine by ID
+        $manufacturer = Manufacturers::find($manufacturerId);
+        if (!$manufacturer) {
+            return response()->json([
+                'error' => 'Manufacturer not found',
+            ]); 
+        }
+    
+        $data = $request->all();
+        $manufacturer->update($data);
+        return response()->json([
+            'message' => 'Manufacturer updated successfully',
+            'data' => $manufacturer,
+        ], 200);
+    }
+    
+    // Delete Drug
+    public function deleteManufacturer($manufacturerId){
+        $manufacturer = Manufacturers::find($manufacturerId);
+    if ($manufacturer) {
+    $manufacturer->delete();
+    }
+    return response()->json($manufacturer, 201);
+    }
+    
     
 }

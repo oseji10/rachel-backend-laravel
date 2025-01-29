@@ -32,5 +32,34 @@ class MedicinesController extends Controller
        
         return response()->json($medicines, 201); 
     }
+
+
+
+    public function update(Request $request, $medicineId)
+    {
+        // Find the medicine by ID
+        $medicine = Medicines::find($medicineId);
+        if (!$medicine) {
+            return response()->json([
+                'error' => 'Drug not found',
+            ]); 
+        }
+    
+        $data = $request->all();
+        $medicine->update($data);
+        return response()->json([
+            'message' => 'Drug updated successfully',
+            'data' => $medicine,
+        ], 200);
+    }
+    
+    // Delete Drug
+    public function deleteMedicine($medicineId){
+        $medicine = Medicines::find($medicineId);
+    if ($medicine) {
+    $medicine->delete();
+    }
+    return response()->json($medicine, 201);
+    }
     
 }
