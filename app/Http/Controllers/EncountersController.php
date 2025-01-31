@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Encounters;
 use App\Models\VisualAcuityFar;
+use App\Models\Patients;
+
 class EncountersController extends Controller
 {
 //     public function RetrieveAll()
@@ -151,35 +153,74 @@ class EncountersController extends Controller
                     // // ->where('user_courses.user_id', '=', Auth::guard('web')->user()->id)
                     // // ->where('user_courses.website_id', '=', $this->userBs->id)
                     // ->get();
-                    $encounters = Encounters::with([
-                        'patients',
-                        'consulting.visualAcuityFarPresentingRight',
-                        'consulting.visualAcuityFarPresentingLeft',
-                        'consulting.visualAcuityFarPinholeRight',
-                        'consulting.visualAcuityFarPinholeLeft',
-                        'consulting.visualAcuityFarBestCorrectedRight',
-                        'consulting.visualAcuityFarBestCorrectedLeft',
-                        'consulting.visualAcuityNearRight',
-                        'consulting.visualAcuityNearLeft',
-                        'continueConsulting.chiefComplaintRight',
-                        'continueConsulting.chiefComplaintLeft',
-                        'refractions.sphereRight',
-                        'refractions.sphereLeft',
-                        'refractions.cylinderRight',
-                        'refractions.cylinderLeft',
-                        'refractions.axisRight',
-                        'refractions.axisLeft',
-                        'refractions.prismRight',
-                        'refractions.prismLeft',
-                        'sketches',
-                        'diagnoses.diagnosisRightDetails',
-                        'diagnoses.diagnosisLeftDetails',
-                        'appointments',
-                        'investigations',
-                        'treatments',
-                    ])->get();
+                   
+                    //  $encounters = Patients::where('patientId', '=', '2147483647')->get();
+                    return $encounters = Patients::whereHas('encounters') // Filters patients who have encounters
+                    ->with([
+                        'encounters.consulting.visualAcuityFarPresentingRight',
+                        'encounters.consulting.visualAcuityFarPresentingLeft',
+                            'encounters.consulting.visualAcuityFarPinholeRight',
+                            'encounters.consulting.visualAcuityFarPinholeLeft',
+                            'encounters.consulting.visualAcuityFarBestCorrectedRight',
+                            'encounters.consulting.visualAcuityFarBestCorrectedLeft',
+                            'encounters.consulting.visualAcuityNearRight',
+                            'encounters.consulting.visualAcuityNearLeft',
+                            'encounters.continueConsulting.chiefComplaintRight',
+                            'encounters.continueConsulting.chiefComplaintLeft',
+                            'encounters.refractions.sphereRight',
+                            'encounters.refractions.sphereLeft',
+                            'encounters.refractions.cylinderRight',
+                            'encounters.refractions.cylinderLeft',
+                            'encounters.refractions.axisRight',
+                            'encounters.refractions.axisLeft',
+                            'encounters.refractions.prismRight',
+                            'encounters.refractions.prismLeft',
+                            'encounters.sketches',
+                            'encounters.diagnoses.diagnosisRightDetails',
+                            'encounters.diagnoses.diagnosisLeftDetails',
+                            'encounters.appointments',
+                            'encounters.investigations',
+                            'encounters.treatments',
+                    ])
+                    //  ->where('patientId', '=', '113')
+                    ->get();
+                
+                         // 'encounters',
+                        // 'encounters.continueConsulting',
+                        // 'encounters.refractions',
+                        // 'encounters.diagnoses',
+                        // 'encounters.investigations',
+                        // 'encounters.treatments',
+
+                    // $encounters = Encounters::with([
+                    //     'patients',
+                    //     'consulting.visualAcuityFarPresentingRight',
+                    //     'consulting.visualAcuityFarPresentingLeft',
+                    //     'consulting.visualAcuityFarPinholeRight',
+                    //     'consulting.visualAcuityFarPinholeLeft',
+                    //     'consulting.visualAcuityFarBestCorrectedRight',
+                    //     'consulting.visualAcuityFarBestCorrectedLeft',
+                    //     'consulting.visualAcuityNearRight',
+                    //     'consulting.visualAcuityNearLeft',
+                    //     'continueConsulting.chiefComplaintRight',
+                    //     'continueConsulting.chiefComplaintLeft',
+                    //     'refractions.sphereRight',
+                    //     'refractions.sphereLeft',
+                    //     'refractions.cylinderRight',
+                    //     'refractions.cylinderLeft',
+                    //     'refractions.axisRight',
+                    //     'refractions.axisLeft',
+                    //     'refractions.prismRight',
+                    //     'refractions.prismLeft',
+                    //     'sketches',
+                    //     'diagnoses.diagnosisRightDetails',
+                    //     'diagnoses.diagnosisLeftDetails',
+                    //     'appointments',
+                    //     'investigations',
+                    //     'treatments',
+                    // ])->get();
                     
-                    return response()->json($encounters, 200);
+                    // return response()->json($encounters, 200);
                          
      }
 

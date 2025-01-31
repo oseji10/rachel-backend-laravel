@@ -25,4 +25,9 @@ class Patients extends Model
         return $this->belongsTo(HMOs::class, 'hmoId', 'hmoId'); 
     }
 
+    public function encounters()
+    {
+        return $this->hasMany(Encounters::class, 'patientId', 'patientId'); 
+    }
+
 }
