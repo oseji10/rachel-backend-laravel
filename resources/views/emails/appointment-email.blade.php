@@ -445,7 +445,7 @@
             <tr>
               <td class="email-masthead">
                 <a href="https://app.racheleyeemr.com" class="f-fallback email-masthead_name">
-                <img src="https://app.ilearnafricaedu.com/images/logo/ilearn-logo.png" width="15%"/>
+                <img src="https://app.racheleyeemr.com/images/logo/ilearn-logo.png" width="15%"/>
               </a>
               </td>
             </tr>
