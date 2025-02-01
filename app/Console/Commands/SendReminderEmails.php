@@ -15,7 +15,7 @@ use DB;
 use App\Models\User\BasicSetting;
 use Illuminate\Support\Facades\Log;
 use App\Mail\AppointmentEmail;
-
+use App\Mail\AppointmentReminderEmail;
 class SendReminderEmails extends Command
 {
     protected $signature = 'send:reminder-emails';
@@ -79,7 +79,7 @@ class SendReminderEmails extends Command
         
             // Send email
             try {
-                Mail::to($patientEmail)->send(new AppointmentEmail($patientEmail, $patientName, $appointmentDate, $appointmentTime, $doctorName));
+                Mail::to($patientEmail)->send(new AppointmentReminderEmail($patientEmail, $patientName, $appointmentDate, $appointmentTime, $doctorName));
                 Log::info("Email successfully sent to $patientEmail.");
             } catch (\Exception $e) {
                 Log::error("Failed to send email to $patientEmail. Error: " . $e->getMessage());

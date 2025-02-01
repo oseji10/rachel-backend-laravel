@@ -437,7 +437,7 @@
   <![endif]-->
   </head>
   <body>
-    <span class="preheader">Thanks for registering on iLearn Africa. We’ve pulled together some information and resources to help you get started.</span>
+    <!-- <span class="preheader">Thanks for registering on iLearn Africa. We’ve pulled together some information and resources to help you get started.</span> -->
     <table class="email-wrapper" width="100%" cellpadding="0" cellspacing="0" role="presentation">
       <tr>
         <td align="center">
@@ -445,7 +445,7 @@
             <tr>
               <td class="email-masthead">
                 <a href="https://app.racheleyeemr.com" class="f-fallback email-masthead_name">
-                <img src="https://app.ilearnafricaedu.com/images/logo/ilearn-logo.png" width="15%"/>
+                <img src="https://app.racheleyemr.com/images/logo/ilearn-logo.png" width="15%"/>
               </a>
               </td>
             </tr>
@@ -458,7 +458,7 @@
                     <td class="content-cell">
                       <div class="f-fallback">
                         <h1>Hi, {{$patient_name}}!</h1>
-                        <p>An appointment has just been booked for you at <b>Rachel Eye Clinic</b>. Please see details of your appointment below:</p>
+                        <p>Kindly be reminded of your appointment with the opthalmologist at <b>Rachel Eye Clinic</b>. Please see details of your appointment below:</p>
                         <!-- Action -->
                         <table class="body-action" align="center" width="100%" cellpadding="0" cellspacing="0" role="presentation">
                           <tr>

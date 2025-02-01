@@ -6,8 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Appointments;
 use App\Models\Encounters;
 use App\Models\Manufacturers;
-
+use App\Models\Patients;
 use App\Mail\AppointmentEmail;
+use App\Models\Doctors;
 use Illuminate\Support\Facades\Mail;
 
 
@@ -22,12 +23,22 @@ class AppointmentsController extends Controller
 
     public function store(Request $request)
     {
-        
+             
         $data = $request->all();
     
         
         $appointments = Appointments::create($data);
     
+        $patient = Patients::where('patientId', $appointments->patientId)->first();
+        $patientEmail = $patient['email'];
+        $patientName = $patient['firstName'] . ' ' . $patient['lastName'];
+        $appointmentDate = $appointments->appointmentDate;
+        $appointmentTime = $appointments->appointmentTime;
+
+        $doctor = Doctors::where('doctorId', $patient->doctor)->first();
+        $doctorName = $doctor->doctorName;
+        Mail::to($patientEmail)->send(new AppointmentEmail($patientEmail, $patientName, $appointmentDate, $appointmentTime, $doctorName)); 
+
        
         return response()->json($appointments, 201); 
     }
