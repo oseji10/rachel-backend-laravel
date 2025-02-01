@@ -53,7 +53,7 @@ class AppointmentsController extends Controller
 
             $doctor = Doctors::where('doctorId', $appointment->doctor)->first();
             $doctorName = $doctor->doctorName;
-            Mail::to($patientEmail)->send(new AppointmentEmail($patientEmail, $patientName, $appointmentDate, $appointmentTime, $doctorName));
+            Mail::to($patientEmail)->send(new AppointmentEmail($patientEmail, $patientName, $appointmentDate, $appointmentTime, $doctorName)); 
 
         }
     

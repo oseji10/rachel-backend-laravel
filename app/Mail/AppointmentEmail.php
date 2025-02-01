@@ -18,10 +18,14 @@ class AppointmentEmail extends Mailable
      *
      * @return void
      */
-    public function __construct($user, $auto_password)
+    public function __construct($patientEmail, $patientName, $appointmentDate, $appointmentTime, $doctorName)
     {
-        $this->user = $user;
-        $this->auto_password = $auto_password;
+        $this->patientEmail = $patientEmail;
+        $this->patientName = $patientName;
+        $this->appointmentDate = $appointmentDate;
+        $this->appointmentTime = $appointmentTime;
+        $this->doctorName = $doctorName;
+
     }
 
     /**
@@ -31,17 +35,18 @@ class AppointmentEmail extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.welcome-email')
+        return $this->view('emails.appointment-email')
                     ->subject('Patient Appointment Schedule - Rachel Eye Clinic')
                     ->with([
-                        'email' => $this->user->email,
-                        'client_id' => $this->user->client_id,
-                        'phone_number' => $this->user->phone_number,
-                        'password' => $this->auto_password,
+                        'email' => $this->patientEmail,
+                        'patient_name' => $this->patientName,
+                        'appointment_date' => $this->appointmentDate,
+                        'appointment_time' => $this->appointmentTime,
+                        'doctor_name' => $this->doctorName,
                         'action_url' => "https://app.ilearnafricaedu.com/auth/signin/",
                         'login_url' => "https://app.ilearnafricaedu.com/auth/signin/",
-                        'firstname' => $this->user->client->firstname, // Accessing the client's firstname
-                        'support_email' => "info@ilearnafricaedu.com",
+                        
+                        'support_email' => "info@racheleyeemr.com",
                     ]);
     }
 }
