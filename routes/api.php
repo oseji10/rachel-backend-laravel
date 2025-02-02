@@ -26,6 +26,11 @@ use App\Http\Controllers\TreatmentController;
 use App\Http\Controllers\InvestigationController;
 use App\Http\Controllers\HMOsController;
 use App\Http\Controllers\ManufacturersController;
+use App\Http\Controllers\BillingController;
+use App\Http\Controllers\InventoryController;
+
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ServiceController; 
 use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 /*
 |--------------------------------------------------------------------------
@@ -112,6 +117,25 @@ Route::post('/manufacturers', [ManufacturersController::class, 'store']);
 Route::put('/manufacturers/{manufacturerId}', [ManufacturersController::class, 'update']);
 Route::delete('/manufacturers/{manufacturerId}', [ManufacturersController::class, 'deleteManufacturer']);
 
+Route::get('/billings', [BillingController::class, 'retrieveAll']);
+Route::post('/billings', [BillingController::class, 'store']);
+Route::put('/billings/{id}', [BillingController::class, 'update']);
+Route::delete('/billings', [BillingController::class, 'delete']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/products', [ProductController::class, 'retrieveAll']);
+    Route::post('/products', [ProductController::class, 'store']);
+    Route::put('/products/{id}', [ProductController::class, 'update']);
+    Route::delete('/products/{id}', [ProductController::class, 'deleteProduct']);  
+    
+    Route::get('/services', [ServiceController::class, 'retrieveAll']);
+    Route::get('/services', [ServiceController::class, 'retrieveAll']);
+    Route::post('/services', [ServiceController::class, 'store']);
+    Route::put('/services/{id}', [ServiceController::class, 'update']);
+    Route::delete('/services/{id}', [ServiceController::class, 'deleteService']);    
+});
+
+
 Route::get('/consulting', [ConsultingController::class, 'retrieveAll']);
 Route::post('/consulting', [ConsultingController::class, 'store']);
 
@@ -135,7 +159,7 @@ Route::post('/investigations', [InvestigationController::class, 'store']);
 
 
 
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/register', [AuthController::class, 'register']);
 Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'user']);
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
