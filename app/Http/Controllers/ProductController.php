@@ -16,6 +16,39 @@ class ProductController extends Controller
        
     }
 
+
+    public function retrieveMedicines()
+    {
+        $product = Product::where('productType', 'Medicine')
+        ->get();
+        return response()->json($product);
+       
+    }
+
+    public function retrieveLenses()
+    {
+        $product = Product::where('productType', 'Lens')->get();
+        return response()->json($product);
+       
+    }
+
+
+    public function retrieveFrames()
+    {
+        $product = Product::where('productType', 'Frame')->get();
+        return response()->json($product);
+       
+    }
+
+
+    public function retrieveAccessories()
+    {
+        $product = Product::where('productType', 'Accessory')->get();
+        return response()->json($product);
+       
+    }
+
+
     public function store(Request $request)
     {
         

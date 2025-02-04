@@ -117,22 +117,45 @@ Route::post('/manufacturers', [ManufacturersController::class, 'store']);
 Route::put('/manufacturers/{manufacturerId}', [ManufacturersController::class, 'update']);
 Route::delete('/manufacturers/{manufacturerId}', [ManufacturersController::class, 'deleteManufacturer']);
 
-Route::get('/billings', [BillingController::class, 'retrieveAll']);
-Route::post('/billings', [BillingController::class, 'store']);
-Route::put('/billings/{id}', [BillingController::class, 'update']);
-Route::delete('/billings', [BillingController::class, 'delete']);
+
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/products', [ProductController::class, 'retrieveAll']);
     Route::post('/products', [ProductController::class, 'store']);
     Route::put('/products/{id}', [ProductController::class, 'update']);
-    Route::delete('/products/{id}', [ProductController::class, 'deleteProduct']);  
+    Route::delete('/products/{id}', [ProductController::class, 'deleteProduct']); 
     
+    Route::get('/medicines', [ProductController::class, 'retrieveMedicines']);
+    Route::get('/lenses', [ProductController::class, 'retrieveLenses']);
+    Route::get('/frames', [ProductController::class, 'retrieveFrames']);
+    Route::get('/accessories', [ProductController::class, 'retrieveAccessories']);
+   
     Route::get('/services', [ServiceController::class, 'retrieveAll']);
     Route::get('/services', [ServiceController::class, 'retrieveAll']);
     Route::post('/services', [ServiceController::class, 'store']);
     Route::put('/services/{id}', [ServiceController::class, 'update']);
-    Route::delete('/services/{id}', [ServiceController::class, 'deleteService']);    
+    Route::delete('/services/{id}', [ServiceController::class, 'deleteService']); 
+    
+    Route::get('/inventories', [InventoryController::class, 'retrieveAll']);
+    Route::post('/inventories', [InventoryController::class, 'store']);
+    Route::put('/inventories/{id}', [InventoryController::class, 'update']);
+    Route::delete('/inventories/{id}', [InventoryController::class, 'deleteInventory']); 
+   
+    Route::get('/medicine-inventories', [InventoryController::class, 'retrieveMedicines']);
+    Route::get('/lenses-inventories', [InventoryController::class, 'retrieveLenses']);
+    Route::get('/frames-inventories', [InventoryController::class, 'retrieveFrames']);
+    Route::get('/accessories-inventories', [InventoryController::class, 'retrieveAccessories']);
+
+    Route::get('/product-billing-inventories', [InventoryController::class, 'billingInventory']);
+    Route::get('/service-billing-inventories', [ServiceController::class, 'serviceInventory']);
+
+    Route::post('/bill-patient', [BillingController::class, 'store']);
+    Route::post('/confirm-payment', [BillingController::class, 'updateBillingStatus']);
+
+    Route::get('/billings', [BillingController::class, 'retrieveAll']);
+Route::post('/billings', [BillingController::class, 'store']);
+Route::put('/billings/{id}', [BillingController::class, 'update']);
+Route::delete('/billings', [BillingController::class, 'delete']);
 });
 
 

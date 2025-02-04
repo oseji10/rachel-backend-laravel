@@ -16,6 +16,14 @@ class ServiceController extends Controller
        
     }
 
+
+    public function serviceInventory(Request $request)
+    {
+        $service = Service::where('serviceType', $request->category)
+        ->get();
+        return response()->json($service);
+    }
+
     public function store(Request $request)
     {
         

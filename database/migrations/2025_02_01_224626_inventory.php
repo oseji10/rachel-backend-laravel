@@ -27,6 +27,7 @@ return new class extends Migration
             $table -> timestamps();
 
             $table->foreign('uploadedBy')->references('id')->on('users');
+            $table->foreign('productId')->references('productId')->on('products');
         });
     }
 

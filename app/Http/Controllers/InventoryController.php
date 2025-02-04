@@ -9,10 +9,60 @@ class InventoryController extends Controller
 {
     public function RetrieveAll()
     {
-        $inventories = Inventory::all();
+        $inventories = Inventory::with('product')->get();
         return response()->json($inventories);
        
     }
+
+
+
+    public function retrieveMedicines()
+    {
+        $product = Inventory::where('inventoryType', 'Medicine')
+        ->with('product')
+        ->get();
+        return response()->json($product);
+       
+    }
+
+    public function retrieveLenses()
+    {
+        $product = Inventory::where('inventoryType', 'Lens')
+        ->with('product')
+        ->get();
+        return response()->json($product);
+       
+    }
+
+
+    public function retrieveFrames()
+    {
+        $product = Inventory::where('inventoryType', 'Frame')
+        ->with('product')
+        ->get();
+        return response()->json($product);
+       
+    }
+
+
+    public function retrieveAccessories()
+    {
+        $product = Inventory::where('inventoryType', 'Accessory')
+        ->with('product')
+        ->get();
+        return response()->json($product);
+       
+    }
+
+    public function billingInventory(Request $request)
+    {
+        $product = Inventory::where('inventoryType', $request->category)
+        ->with('product')
+        ->get();
+        return response()->json($product);
+       
+    }
+
 
     public function store(Request $request)
     {

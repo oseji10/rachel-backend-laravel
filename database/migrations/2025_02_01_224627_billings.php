@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('billings', function (Blueprint $table) {
             $table->id('billingId');
+            $table->string('transactionId')->nullable();
             $table->unsignedBigInteger('patientId')->nullable();
             $table->string('billingType')->nullable();
-            $table->string('billingName')->nullable();
+            $table->string('categoryType')->nullable();
             $table->unsignedBigInteger('inventoryId')->nullable();
+            $table->unsignedBigInteger('productId')->nullable();
+            $table->unsignedBigInteger('serviceId')->nullable();
             $table->string('cost')->nullable();
             $table->string('quantity')->nullable();
             $table->string('paymentMethod')->nullable();
@@ -31,6 +34,8 @@ return new class extends Migration
             $table->foreign('patientId')->references('patientId')->on('patients');
             $table->foreign('billedBy')->references('id')->on('users');
             $table->foreign('inventoryId')->references('inventoryId')->on('inventory');
+            $table->foreign('productId')->references('productId')->on('products');
+            $table->foreign('serviceId')->references('serviceId')->on('services');
         });
     }
 

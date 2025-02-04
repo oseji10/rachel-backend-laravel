@@ -10,22 +10,18 @@ class Inventory extends Model
     use HasFactory;
     public $table = 'inventory';
     protected $fillable = [
+    'productId',
     'inventoryId', 
     'inventoryName',
     'inventoryType',
-    'inventoryBatchNumber',
-    'inventoryExpiryDate',
-    'inventoryQuantityReceived',
-    'inventoryQuantitySold',
-    'inventoryCost',
-    'inventoryPrice',
-    'inventoryStatus',
-    'inventoryImage',
-    'inventoryManufacturer',
-    'inventorySupplier',
-    'inventoryQuantityDamaged',
-    'inventoryQuantityReturned',
-    'inventoryQuantityExpired',
+    'batchNumber',
+    'expiryDate',
+    'quantityReceived',
+    'quantitySold',
+    'quantityDamaged',
+    'quantityReturned',
+    'quantityExpired',
+    
     'uploadedBy'
 
     
@@ -35,5 +31,10 @@ class Inventory extends Model
     public function inventoryUploads()
     {
         return $this->belongsTo(DocumentUpload::class, 'uploadedBy', 'documentId');
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'productId', 'productId');
     }
 }
