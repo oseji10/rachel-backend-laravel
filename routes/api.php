@@ -155,8 +155,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/billings', [BillingController::class, 'retrieveAll']);
 Route::post('/billings', [BillingController::class, 'store']);
 Route::put('/billings/{id}', [BillingController::class, 'update']);
-Route::delete('/billings', [BillingController::class, 'delete']);
+Route::delete('/billings/{transactionId}', [BillingController::class, 'deleteBilling']);
+// Route::delete('/billings', [BillingController::class, 'delete']);
 });
+Route::get('/print-receipt/{transactionId}', [BillingController::class, 'printBilling']);
 
 
 Route::get('/consulting', [ConsultingController::class, 'retrieveAll']);

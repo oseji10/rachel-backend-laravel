@@ -13,6 +13,8 @@ use App\Models\Service;
 use Illuminate\Support\Facades\Auth;
 use DB;
 use Illuminate\Support\Str;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class BillingController extends Controller
 {
@@ -37,7 +39,8 @@ public function RetrieveAll()
         ->with('patient.doctor')   // Eager load the patient relationship
         ->with('product')   // Eager load the product relationship
         ->with('service')   // Eager load the service relationship
-        ->groupBy('transactionId', 'patientId', 'created_at', 'paymentStatus', 'paymentMethod')  // Group by necessary fields
+        ->groupBy('transactionId', 'patientId', 'created_at', 'paymentStatus', 'paymentMethod')  
+        ->orderBy('created_at', 'desc')
         ->get();
 
     // Loop through each transaction and fetch associated transactions tied to the same transactionId
@@ -49,6 +52,31 @@ public function RetrieveAll()
     return response()->json($transactions);
 }
 
+
+
+public function printBilling($transactionId)
+{
+    // Retrieve transaction details with patient, products, and services
+    $transaction = Billing::selectRaw('transactionId, created_at, paymentStatus, paymentMethod, patientId, SUM(cost*quantity) as grand_total')
+        ->with(['patient.doctor', 'product', 'service']) // Eager load relationships
+        ->where('transactionId', $transactionId)
+        ->groupBy('transactionId', 'patientId', 'created_at', 'paymentStatus', 'paymentMethod')
+        ->first();
+
+    // Fetch all items (products/services) in the transaction
+    $items = Billing::where('transactionId', $transactionId)
+        ->with(['product', 'service'])
+        ->get();
+
+    // Generate PDF using a view
+    $pdf = Pdf::loadView('pdf.billing_receipt', [
+        'transaction' => $transaction,
+        'items' => $items
+    ]);
+
+    // Return the PDF as a download
+    return $pdf->download('billing_receipt_' . $transactionId . '.pdf');
+}
 
 public function updateBillingStatus(Request $request)
 {
@@ -202,20 +230,20 @@ public function updateBillingStatus(Request $request)
         ], 200);
     }
 
-
-    // Delete Billing
-    public function deleteBilling($billingId){
-        $billing = Billing::find($billingId);
-    if ($billing) {   
-    $billing->delete();
-    return response()->json([
-        'message' => 'Billing deleted successfully',
-    ], 200);
-    } else {
-        return response()->json([
-            'error' => 'Billing not found',
-        ]);
+    public function deleteBilling($transactionId)
+    {
+        $deleted = Billing::where('transactionId', $transactionId)->delete();
+    
+        if ($deleted) {   
+            return response()->json([
+                'message' => 'Billing deleted successfully',
+            ], 200);
+        } else {
+            return response()->json([
+                'error' => 'Billing not found',
+            ], 404);
+        }
     }
-    }
+    
     
 }

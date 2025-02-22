@@ -30,4 +30,6 @@ class Patients extends Model
         return $this->hasMany(Encounters::class, 'patientId', 'patientId'); 
     }
 
+    
+
 }
