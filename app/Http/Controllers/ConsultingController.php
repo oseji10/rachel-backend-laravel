@@ -19,25 +19,21 @@ class ConsultingController extends Controller
         // Retrieve all data from the request
         $data = $request->all();
     
-        // Validate incoming request data (optional but recommended)
-        // $validated = $request->validate([
-        //     'patientId' => 'required|integer', // Example fields, adjust based on your schema
-        //     'details' => 'nullable|string',    // Example field for consulting
-        // ]);
     
         // Create a new consulting record
         $consulting = Consulting::create($data);
     
         // Create a new encounter record and link the consultingId
-        $encounter = Encounters::create([
-            'patientId' => $request->patientId,
-            'consultingId' => $consulting->consultingId, // Link the consultingId
-        ]);
+       
+        $encounter = Encounters::where('encounterId', $request->encounterId)->first();
     
-        // Update the consulting record with the encounterId
-        $consulting->update([
-            'encounterId' => $encounter->encounterId, // Link the encounterId
-        ]);
+        if ($encounter) {
+            // Update the Encounter with the continueConsultingId
+            $encounter->update([
+                'consultingId' => $consulting->consultingId, // Assuming id is the primary key of ContinueConsulting
+            ]);
+    
+        }
     
         // Return the newly created encounter and consulting as JSON response
         return response()->json(['encounterId' =>$encounter->encounterId], 201);// HTTP status code 201: Created

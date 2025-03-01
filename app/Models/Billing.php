@@ -53,6 +53,11 @@ class Billing extends Model
         return $this->belongsTo(Patients::class, 'patientId', 'patientId');
     }
 
+    public function biller()
+    {
+        return $this->belongsTo(User::class, 'billedBy', 'id');
+    }
+
     public function service()
     {
         return $this->belongsTo(Service::class, 'serviceId', 'serviceId');

@@ -53,5 +53,6 @@
 
     <h3 class="center-text">Grand Total: N{{ number_format($transaction->grand_total, 2) }}</h3>
 
+    <h5>Billed By: {{$transaction->biller->firstName ?? ""}} {{$transaction->biller->lastName ?? ""}}</h5>
 </body>
 </html>

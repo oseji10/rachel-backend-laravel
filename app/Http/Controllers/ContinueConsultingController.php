@@ -23,17 +23,27 @@ class ContinueConsultingController extends Controller
         // Create a new ContinueConsulting record
         $continue_consulting = ContinueConsulting::create($data);
     
+        $encounter = Encounters::create([
+            'patientId' => $request->patientId,
+            'continueConsultingId' => $continue_consulting->continueConsultingId, // Link the consultingId
+        ]);
         // Find the Encounter by the encounterId sent in the request
-        $encounter = Encounters::where('encounterId', $request->encounterId)->first();
+        // $encounter = Encounters::where('encounterId', $request->encounterId)->first();
     
-        if ($encounter) {
-            // Update the Encounter with the continueConsultingId
-            $encounter->update([
-                'continueConsultingId' => $continue_consulting->continueConsultingId, // Assuming id is the primary key of ContinueConsulting
+        // if ($encounter) {
+        //     // Update the Encounter with the continueConsultingId
+        //     $encounter->update([
+        //         'continueConsultingId' => $continue_consulting->continueConsultingId, // Assuming id is the primary key of ContinueConsulting
+        //     ]);
+    
+            
+        
+            // Update the consulting record with the encounterId
+            $continue_consulting->update([
+                'encounterId' => $encounter->encounterId, // Link the encounterId
             ]);
-    
       
-        }
+        // }
     
         return response()->json(['encounterId' =>$encounter->encounterId], 201);// HTTP status code 201: Created
     }

@@ -57,10 +57,10 @@ public function RetrieveAll()
 public function printBilling($transactionId)
 {
     // Retrieve transaction details with patient, products, and services
-    $transaction = Billing::selectRaw('transactionId, created_at, paymentStatus, paymentMethod, patientId, SUM(cost*quantity) as grand_total')
-        ->with(['patient.doctor', 'product', 'service']) // Eager load relationships
+    $transaction = Billing::selectRaw('transactionId, created_at, paymentStatus, paymentMethod, patientId, billedBy, SUM(cost*quantity) as grand_total')
+        ->with(['patient.doctor', 'product', 'service', 'biller']) // Eager load relationships
         ->where('transactionId', $transactionId)
-        ->groupBy('transactionId', 'patientId', 'created_at', 'paymentStatus', 'paymentMethod')
+        ->groupBy('transactionId', 'patientId', 'billedBy', 'created_at', 'paymentStatus', 'paymentMethod')
         ->first();
 
     // Fetch all items (products/services) in the transaction
@@ -75,7 +75,9 @@ public function printBilling($transactionId)
     ]);
 
     // Return the PDF as a download
-    return $pdf->download('billing_receipt_' . $transactionId . '.pdf');
+    // return $pdf->download('billing_receipt_' . $transactionId . '.pdf');
+    return $pdf->stream('billing_receipt_' . $transactionId . '.pdf');
+
 }
 
 public function updateBillingStatus(Request $request)

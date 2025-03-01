@@ -107,7 +107,7 @@ Route::delete('/appointments/{appointmentId}', [AppointmentsController::class, '
 Route::put('/appointments/{appointmentId}', [AppointmentsController::class, 'updateAppointment']);
 
 
-Route::get('/medicines', [MedicinesController::class, 'retrieveAll']);
+// Route::get('/medicines', [MedicinesController::class, 'retrieveAll']);
 Route::post('/medicines', [MedicinesController::class, 'store']);
 Route::put('/medicines/{medicineId}', [MedicinesController::class, 'update']);
 Route::delete('/medicines/{medicineId}', [MedicinesController::class, 'deleteMedicine']);
@@ -119,13 +119,13 @@ Route::delete('/manufacturers/{manufacturerId}', [ManufacturersController::class
 
 
 
+Route::get('/medicines', [ProductController::class, 'retrieveMedicines']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/products', [ProductController::class, 'retrieveAll']);
     Route::post('/products', [ProductController::class, 'store']);
     Route::put('/products/{id}', [ProductController::class, 'update']);
     Route::delete('/products/{id}', [ProductController::class, 'deleteProduct']); 
     
-    Route::get('/medicines', [ProductController::class, 'retrieveMedicines']);
     Route::get('/lenses', [ProductController::class, 'retrieveLenses']);
     Route::get('/frames', [ProductController::class, 'retrieveFrames']);
     Route::get('/accessories', [ProductController::class, 'retrieveAccessories']);
