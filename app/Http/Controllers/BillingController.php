@@ -76,7 +76,7 @@ public function printBilling($transactionId)
 
     // Return the PDF as a download
     // return $pdf->download('billing_receipt_' . $transactionId . '.pdf');
-    return $pdf->stream('billing_receipt_' . $transactionId . '.pdf');
+    // return $pdf->stream('billing_receipt_' . $transactionId . '.pdf');
 
 }
 

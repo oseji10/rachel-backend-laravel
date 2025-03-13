@@ -8,6 +8,7 @@ use App\Models\Encounters;
 use App\Models\Manufacturers;
 use App\Models\Patients;
 use App\Mail\AppointmentEmail;
+use App\Mail\DoctorAppointmentEmail;
 use App\Models\Doctors;
 use Illuminate\Support\Facades\Mail;
 
@@ -23,7 +24,8 @@ class AppointmentsController extends Controller
 
     public function store(Request $request)
     {
-             
+      
+       
         $data = $request->all();
     
         
@@ -35,9 +37,15 @@ class AppointmentsController extends Controller
         $appointmentDate = $appointments->appointmentDate;
         $appointmentTime = $appointments->appointmentTime;
 
-        $doctor = Doctors::where('doctorId', $patient->doctor)->first();
+        $doctor = Doctors::where('doctorId', $request->doctor)
+        // ->with('doctors')
+        ->first();
         $doctorName = $doctor->doctorName;
+        $doctorEmail = $doctor->doctors->email;
+
         Mail::to($patientEmail)->send(new AppointmentEmail($patientEmail, $patientName, $appointmentDate, $appointmentTime, $doctorName)); 
+
+       $emailDoctor = Mail::to($doctorEmail)->send(new DoctorAppointmentEmail($doctorEmail, $patientName, $appointmentDate, $appointmentTime, $doctorName)); 
 
        
         return response()->json($appointments, 201); 

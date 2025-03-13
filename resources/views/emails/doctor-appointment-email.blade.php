@@ -445,7 +445,7 @@
             <tr>
               <td class="email-masthead">
                 <a href="https://app.racheleyeemr.com" class="f-fallback email-masthead_name">
-                <img src="https://app.racheleyemr.com/images/logo/ilearn-logo.png" width="15%"/>
+                <img src="https://app.racheleyeemr.com/images/logo/ilearn-logo.png" width="15%"/>
               </a>
               </td>
             </tr>
@@ -457,8 +457,8 @@
                   <tr>
                     <td class="content-cell">
                       <div class="f-fallback">
-                        <h1>Hi, {{$patient_name}}!</h1>
-                        <p>Kindly be reminded of your appointment with the opthalmologist at <b>Rachel Eye Clinic</b>. Please see details of your appointment below:</p>
+                        <h1>Hi, {{$doctor_name}}!</h1>
+                        <p>An appointment has just been assigned to you at <b>Rachel Eye Clinic</b>. Please see details of this appointment below:</p>
                         <!-- Action -->
                         <table class="body-action" align="center" width="100%" cellpadding="0" cellspacing="0" role="presentation">
                           <tr>
@@ -468,16 +468,17 @@
                               <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
                                 <tr>
                                   <td align="center">
+                                    Patient Name: {{$patient_name}}<br>
                                     Appointment Date: {{$appointment_date}}<br>
                                     Appointment Time: {{$appointment_time}}<br>
-                                    Doctor To See: {{$doctor_name}}<br>
+                                    <!-- Doctor To See: {{$doctor_name}}<br> -->
                                   </td>
                                 </tr>
                               </table>
                             </td>
                           </tr>
                         </table>
-                        <p>Kindly endeavour to keep to this date and time as missing your appointment may mean rescheduling to another week</p>
+                        <p>Kindly endeavour to add this date to your calender in order to fulfil the patient's appointment</p>
                         
                         <p>Thanks,
                           <br>Rachel Clinic Team</p>

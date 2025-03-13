@@ -32,12 +32,6 @@ class RefractionController extends Controller
                 'refractionId' => $refraction->refractionId, // Assuming id is the primary key of ContinueConsulting
             ]);
     
-            // // Return a success response
-            // return response()->json([
-            //     'message' => 'ContinueConsulting record created and Encounter updated successfully.',
-            //     'continueConsulting' => $continue_consulting,
-            //     'encounter' => $encounter,
-            // ], 201); // HTTP status code 201: Created
         }
     
         return response()->json(['encounterId' =>$encounter->encounterId], 201);// HTTP status code 201: Created
