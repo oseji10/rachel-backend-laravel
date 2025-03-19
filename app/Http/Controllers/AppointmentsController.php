@@ -23,33 +23,46 @@ class AppointmentsController extends Controller
     }
 
     public function store(Request $request)
-    {
-      
-       
-        $data = $request->all();
-    
-        
-        $appointments = Appointments::create($data);
-    
-        $patient = Patients::where('patientId', $appointments->patientId)->first();
-        $patientEmail = $patient['email'];
-        $patientName = $patient['firstName'] . ' ' . $patient['lastName'];
-        $appointmentDate = $appointments->appointmentDate;
-        $appointmentTime = $appointments->appointmentTime;
+{
+    $data = $request->all();
 
-        $doctor = Doctors::where('doctorId', $request->doctor)
-        // ->with('doctors')
-        ->first();
-        $doctorName = $doctor->doctorName;
-        $doctorEmail = $doctor->doctors->email;
+    // Create an appointment
+    $appointments = Appointments::create($data);
 
-        Mail::to($patientEmail)->send(new AppointmentEmail($patientEmail, $patientName, $appointmentDate, $appointmentTime, $doctorName)); 
+    // Fetch patient details
+    $patient = Patients::where('patientId', $appointments->patientId)->first();
+    $patientEmail = $patient->email ?? null;
+    $patientName = $patient->firstName . ' ' . $patient->lastName;
+    $appointmentDate = $appointments->appointmentDate;
+    $appointmentTime = $appointments->appointmentTime;
 
-       $emailDoctor = Mail::to($doctorEmail)->send(new DoctorAppointmentEmail($doctorEmail, $patientName, $appointmentDate, $appointmentTime, $doctorName)); 
+    // Fetch doctor details
+    $doctor = Doctors::where('doctorId', $request->doctor)->first();
+    $doctorEmail = $doctor->doctors->email ?? null;
+    $doctorName = $doctor->doctorName;
 
-       
-        return response()->json($appointments, 201); 
+    $messages = [];
+
+    // Send email to patient if email exists
+    if ($patientEmail) {
+        Mail::to($patientEmail)->send(new AppointmentEmail($patientEmail, $patientName, $appointmentDate, $appointmentTime, $doctorName));
+    } else {
+        $messages[] = "Patient email is missing, email was not sent.";
     }
+
+    // Send email to doctor if email exists
+    if ($doctorEmail) {
+        Mail::to($doctorEmail)->send(new DoctorAppointmentEmail($doctorEmail, $patientName, $appointmentDate, $appointmentTime, $doctorName));
+    } else {
+        $messages[] = "Doctor email is missing, email was not sent.";
+    }
+
+    return response()->json([
+        'appointment' => $appointments,
+        'messages' => $messages,
+    ], 201);
+}
+
 
 
     public function createEncounterAppointment(Request $request)
