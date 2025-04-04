@@ -17,7 +17,9 @@ class AppointmentsController extends Controller
 {
     public function RetrieveAll()
     {
-        $appointments = Appointments::with('patients', 'encounters', 'doctors')->get();
+        $appointments = Appointments::with('patients', 'encounters', 'doctors')
+        ->orderBy('created_at', 'desc')
+        ->get();
         return response()->json($appointments);
        
     }
