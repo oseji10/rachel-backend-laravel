@@ -90,4 +90,63 @@ class TreatmentController extends Controller
            }
         return response()->json(['message' => 'Treatments saved successfully.'], 201);
     }
+
+   
+        public function getPrescriptions(Request $request)
+        {
+            try {
+                // Fetch treatments with patient details
+                $treatments = Treatment::select(
+                    'treatmentId',
+                    'patientId',
+                    'encounterId',
+                    'treatmentType',
+                    'medicine',
+                    'dosage',
+                    'doseDuration',
+                    'doseInterval',
+                    'time',
+                    'comment',
+                    'frame',
+                    'lensType',
+                    'costOfLens',
+                    'costOfFrame',
+                    'created_at'
+                )
+                    ->with(['patient' => function ($query) {
+                        $query->select('patientId', 'firstName', 'lastName', 'email', 'phoneNumber'); // Adjust columns as needed
+                    }])
+                    ->get();
+    
+                // Group treatments by treatmentId and restructure the data
+                $groupedTreatments = $treatments->groupBy('treatmentId')->map(function ($group) {
+                    // Get patient details from the first treatment in the group
+                    $patient = $group->first()->patient;
+                    
+                    // Remove patient relationship from individual treatments
+                    $treatments = $group->map(function ($treatment) {
+                        return collect($treatment->toArray())->except('patient');
+                    });
+    
+                    return [
+                        'patient' => $patient,
+                        'treatments' => $treatments
+                    ];
+                });
+    
+                // Return JSON response
+                return response()->json([
+                    'success' => true,
+                    'data' => $groupedTreatments
+                ], 200);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to retrieve prescriptions',
+                    'error' => $e->getMessage()
+                ], 500);
+            }
+        }
+    
+    
 }

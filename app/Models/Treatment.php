@@ -26,5 +26,10 @@ class Treatment extends Model
         'costOfLens',
         'costOfFrame'
     ];
+
+    public function patient()
+    {
+        return $this->belongsTo(Patients::class, 'patientId', 'patientId'); 
+    }
   
 }
