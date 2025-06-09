@@ -31,4 +31,9 @@ class Product extends Model
     {
         return $this->belongsTo(DocumentUpload::class, 'uploadedBy', 'documentId');
     }
+
+     public function inventory()
+    {
+        return $this->belongsTo(Inventory::class, 'inventoryId', 'inventoryId');
+    }
 }

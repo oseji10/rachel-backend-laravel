@@ -25,8 +25,5 @@ class Service extends Model
 
    protected $primaryKey = 'serviceId';
 
-    public function productUploads()
-    {
-        return $this->belongsTo(DocumentUpload::class, 'uploadedBy', 'documentId');
-    }
+   
 }

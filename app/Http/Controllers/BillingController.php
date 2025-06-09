@@ -34,21 +34,25 @@ public function generateCode()
 
 public function RetrieveAll()
 {
-    // Retrieve all the transactions with related billing, patient, product, and service information
+    // Retrieve all transactions with related billing, patient, product, and service information
     $transactions = Billing::selectRaw('transactionId, created_at, paymentStatus, paymentMethod, GROUP_CONCAT(billingId) as billing_ids, patientId, SUM(cost*quantity) as total_cost')
-        ->with('patient.doctor')   // Eager load the patient relationship
-        ->with('product')   // Eager load the product relationship
-        ->with('service')   // Eager load the service relationship
-        ->groupBy('transactionId', 'patientId', 'created_at', 'paymentStatus', 'paymentMethod')  
+        ->with('patient.doctor')
+        ->groupBy('transactionId', 'patientId', 'created_at', 'paymentStatus', 'paymentMethod')
         ->orderBy('created_at', 'desc')
         ->get();
 
-    // Loop through each transaction and fetch associated transactions tied to the same transactionId
+    // Loop through each transaction and fetch associated transactions
     foreach ($transactions as $transaction) {
-        $transaction->relatedTransactions = Billing::where('transactionId', $transaction->transactionId)->get();
+        $transaction->relatedTransactions = Billing::where('transactionId', $transaction->transactionId)
+            ->with(['product', 'service'])
+            ->get();
     }
 
     // Return the result with the related transactions
+    if ($transactions->isEmpty()) {
+        return response()->json(['message' => 'No transactions found'], 404);
+    }
+
     return response()->json($transactions);
 }
 

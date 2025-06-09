@@ -45,7 +45,7 @@ class Billing extends Model
 
     public function product()
     {
-        return $this->belongsTo(Product::class, 'productId', 'productId');
+        return $this->belongsTo(Product::class, 'productId');
     }
 
     public function patient()
