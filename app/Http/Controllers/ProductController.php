@@ -27,7 +27,7 @@ class ProductController extends Controller
 
     public function retrieveLenses()
     {
-        $product = Product::where('productType', 'Lens')->get();
+        $product = Product::where('productType', 'Opticals')->get();
         return response()->json($product);
        
     }
