@@ -87,18 +87,18 @@ private function sendSMS($patientPhone, $smsMessage)
     $messages = [];
 
     // Send email to patient if email exists
-    // if ($patientEmail) {
-    //     Mail::to($patientEmail)->send(new AppointmentEmail($patientEmail, $patientName, $appointmentDate, $appointmentTime, $doctorName));
-    // } else {
-    //     $messages[] = "Patient email is missing, email was not sent.";
-    // }
+    if ($patientEmail) {
+        Mail::to($patientEmail)->send(new AppointmentEmail($patientEmail, $patientName, $appointmentDate, $appointmentTime, $doctorName));
+    } else {
+        $messages[] = "Patient email is missing, email was not sent.";
+    }
 
-    // // Send email to doctor if email exists
-    // if ($doctorEmail) {
-    //     Mail::to($doctorEmail)->send(new DoctorAppointmentEmail($doctorEmail, $patientName, $appointmentDate, $appointmentTime, $doctorName));
-    // } else {
-    //     $messages[] = "Doctor email is missing, email was not sent.";
-    // }
+    // Send email to doctor if email exists
+    if ($doctorEmail) {
+        Mail::to($doctorEmail)->send(new DoctorAppointmentEmail($doctorEmail, $patientName, $appointmentDate, $appointmentTime, $doctorName));
+    } else {
+        $messages[] = "Doctor email is missing, email was not sent.";
+    }
 
     if ($patientPhone){
         $smsMessage = "Hello $patientName, your appointment with Dr. $doctorName is scheduled for $appointmentDate at $appointmentTime. Please arrive 15 minutes early. Thank you!";
