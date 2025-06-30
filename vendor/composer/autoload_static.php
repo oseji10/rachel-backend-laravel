@@ -607,6 +607,7 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         'App\\Mail\\AppointmentEmail' => __DIR__ . '/../..' . '/app/Mail/AppointmentEmail.php',
         'App\\Mail\\AppointmentReminderEmail' => __DIR__ . '/../..' . '/app/Mail/AppointmentReminderEmail.php',
         'App\\Mail\\DoctorAppointmentEmail' => __DIR__ . '/../..' . '/app/Mail/DoctorAppointmentEmail.php',
+        'App\\Models\\AppointmentQueue' => __DIR__ . '/../..' . '/app/Models/AppointmentQueue.php',
         'App\\Models\\Appointments' => __DIR__ . '/../..' . '/app/Models/Appointments.php',
         'App\\Models\\Billing' => __DIR__ . '/../..' . '/app/Models/Billing.php',
         'App\\Models\\ChiefComplaint' => __DIR__ . '/../..' . '/app/Models/ChiefComplaint.php',

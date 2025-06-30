@@ -22,5 +22,10 @@ class AppointmentQueue extends Model
         return $this->belongsTo(User::class, 'scheduledBy', 'id');
     }
 
+    public function appointment()
+    {
+        return $this->belongsTo(Appointments::class);
+    }
+
     
 }

@@ -28,6 +28,7 @@ use App\Http\Controllers\HMOsController;
 use App\Http\Controllers\ManufacturersController;
 use App\Http\Controllers\BillingController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\NearAddController;
 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ServiceController; 
@@ -65,6 +66,10 @@ Route::post('/refraction_axis', [RefractionAxisController::class, 'store']);
 
 Route::get('/refraction_sphere', [RefractionSphereController::class, 'retrieveAll']);
 Route::post('/refraction_sphere', [RefractionSphereController::class, 'store']);
+
+Route::get('/near_add', [NearAddController::class, 'retrieveAll']);
+Route::post('/near_add', [NearAddController::class, 'store']);
+
 
 Route::get('/diagnosis_list', [DiagnosisListController::class, 'retrieveAll']);
 Route::post('/diagnosis_list', [DiagnosisListController::class, 'store']);
@@ -162,7 +167,7 @@ Route::get('/print-receipt/{transactionId}', [BillingController::class, 'printBi
 
 
 Route::get('/consulting', [ConsultingController::class, 'retrieveAll']);
-Route::post('/consulting', [ConsultingController::class, 'store']);
+Route::post('/consulting', [EncountersController::class, 'store']);
 
 Route::get('/continue_consulting', [ContinueConsultingController::class, 'retrieveAll']);
 Route::post('/continue_consulting', [ContinueConsultingController::class, 'store']);

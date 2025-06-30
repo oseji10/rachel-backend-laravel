@@ -11,20 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('services', function (Blueprint $table) {
-            $table->id('serviceId');
-            $table->string('serviceName')->nullable();
-            $table->string('serviceDescription')->nullable();
-            $table->string('serviceType')->nullable();
-            $table->string('serviceCategory')->nullable();
-            $table->string('serviceCost')->nullable();
-            $table->string('servicePrice')->nullable();
-            $table->string('serviceStatus')->nullable();
-            $table->unsignedBigInteger('uploadedBy')->nullable();
-            $table->timestamps();
+        // Schema::create('services', function (Blueprint $table) {
+        //     $table->id('serviceId');
+        //     $table->string('serviceName')->nullable();
+        //     $table->string('serviceDescription')->nullable();
+        //     $table->string('serviceType')->nullable();
+        //     $table->string('serviceCategory')->nullable();
+        //     $table->string('serviceCost')->nullable();
+        //     $table->string('servicePrice')->nullable();
+        //     $table->string('serviceStatus')->nullable();
+        //     $table->unsignedBigInteger('uploadedBy')->nullable();
+        //     $table->timestamps();
 
-            $table->foreign('uploadedBy')->references('id')->on('users');
-        });
+        //     $table->foreign('uploadedBy')->references('id')->on('users');
+        // });
     }
 
     /**

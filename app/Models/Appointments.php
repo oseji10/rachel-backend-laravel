@@ -26,4 +26,9 @@ class Appointments extends Model
     {
         return $this->belongsTo(Doctors::class, 'doctor', 'doctorId');
     }
+
+    public function queue()
+    {
+        return $this->hasOne(AppointmentQueue::class);
+    }
 }

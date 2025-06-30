@@ -17,6 +17,8 @@ return new class extends Migration
             $table->unsignedBigInteger('encounterId')->nullable();
             $table->unsignedBigInteger('diagnosisRight')->nullable();
             $table->unsignedBigInteger('diagnosisLeft')->nullable();
+            $table->string('problemsRight')->nullable();
+            $table->string('problemsLeft')->nullable();
             $table->timestamps();
 
             $table->foreign('patientId')->references('patientId')->on('patients')->onDelete('cascade');

@@ -15,22 +15,26 @@ return new class extends Migration
             $table->id('refractionId');
             $table->unsignedBigInteger('patientId')->nullable();
             $table->unsignedBigInteger('encounterId')->nullable();
-            $table->text('nearAddRight')->nullable();
-            $table->text('nearAddLeft')->nullable();
-            $table->text('OCTRight')->nullable();
-            $table->text('OCTLeft')->nullable();
-            $table->text('FFARight')->nullable();
-            $table->text('FFALeft')->nullable();
-            $table->text('fundusPhotographyRight')->nullable();
-            $table->text('fundusPhotographyLeft')->nullable();
-            $table->text('pachymetryRight')->nullable();
-            $table->text('pachymetryLeft')->nullable();
-            $table->text('CUFTRight')->nullable();
-            $table->text('CUFTLeft')->nullable();
-            $table->text('CUFTKineticRight')->nullable();
-            $table->text('CUFTKineticLeft')->nullable();
-            $table->text('pupilRight')->nullable();
-            $table->text('pupilLeft')->nullable();
+            $table->string('pd')->nullable();
+            $table->string('bridge')->nullable();
+            $table->string('eyeSize')->nullable();
+            $table->string('temple')->nullable();
+            $table->string('decentration')->nullable();
+            $table->string('segmentMeasurement')->nullable();
+            $table->string('frameType')->nullable();
+            $table->string('frameColor')->nullable();
+            $table->string('frameCost')->nullable();
+            $table->string('lensType')->nullable();
+            $table->string('lensColor')->nullable();
+            $table->string('lensCost')->nullable();
+            $table->string('other')->nullable();
+            $table->string('surfacing')->nullable();
+            $table->string('caseSize')->nullable();
+
+           
+            $table->unsignedBigInteger('nearAddRight')->nullable();
+            $table->unsignedBigInteger('nearAddLeft')->nullable();
+
             $table->unsignedBigInteger('refractionSphereRight')->nullable();
             $table->unsignedBigInteger('refractionSphereLeft')->nullable();
             $table->unsignedBigInteger('refractionCylinderRight')->nullable();
@@ -44,6 +48,9 @@ return new class extends Migration
 
             $table->foreign('patientId')->references('patientId')->on('patients')->onDelete('cascade');
             $table->foreign('encounterId')->references('encounterId')->on('encounters')->onDelete('cascade');
+            $table->foreign('nearAddRight')->references('id')->on('refraction_sphere')->onDelete('cascade');
+            $table->foreign('nearAddLeft')->references('id')->on('refraction_sphere')->onDelete('cascade');
+
             $table->foreign('refractionSphereRight')->references('id')->on('refraction_sphere')->onDelete('cascade');
             $table->foreign('refractionSphereLeft')->references('id')->on('refraction_sphere')->onDelete('cascade');
             $table->foreign('refractionCylinderRight')->references('id')->on('refraction_cylinder')->onDelete('cascade');
@@ -52,7 +59,7 @@ return new class extends Migration
             $table->foreign('refractionAxisLeft')->references('id')->on('refraction_axis')->onDelete('cascade');
             $table->foreign('refractionPrismRight')->references('id')->on('refraction_prism')->onDelete('cascade');
             $table->foreign('refractionPrismLeft')->references('id')->on('refraction_prism')->onDelete('cascade');
-          
+
         });
     }
 

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('doctor')->nullable();
             $table->string('comment')->nullable();
             $table->unsignedBigInteger('createdBy')->nullable();
+            $table->enum('status', ['scheduled', 'arrived', 'completed', 'cancelled'])->default('scheduled');
             $table->timestamps();
             $table->softDeletes();
 

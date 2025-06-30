@@ -17,6 +17,7 @@ return new class extends Migration
             $table -> string('queueNumber') -> nullable();
             $table -> string('attendedTo') -> nullable();
             $table -> unsignedBigInteger('scheduledBy') -> nullable();
+            $table->enum('status', ['waiting', 'called', 'completed'])->default('waiting');
             $table -> timestamps();
 
             $table->foreign('patientId')->references('patientId')->on('patients');

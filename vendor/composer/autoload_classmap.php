@@ -53,6 +53,7 @@ return array(
     'App\\Mail\\AppointmentEmail' => $baseDir . '/app/Mail/AppointmentEmail.php',
     'App\\Mail\\AppointmentReminderEmail' => $baseDir . '/app/Mail/AppointmentReminderEmail.php',
     'App\\Mail\\DoctorAppointmentEmail' => $baseDir . '/app/Mail/DoctorAppointmentEmail.php',
+    'App\\Models\\AppointmentQueue' => $baseDir . '/app/Models/AppointmentQueue.php',
     'App\\Models\\Appointments' => $baseDir . '/app/Models/Appointments.php',
     'App\\Models\\Billing' => $baseDir . '/app/Models/Billing.php',
     'App\\Models\\ChiefComplaint' => $baseDir . '/app/Models/ChiefComplaint.php',

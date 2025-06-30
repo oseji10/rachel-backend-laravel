@@ -170,4 +170,40 @@ if ($appointment) {
 }
 return response()->json($appointment, 201);
     }
+
+
+     public function checkIn(Request $request, $appointmentId)
+    {
+        $appointment = Appointments::findOrFail($appointmentId);
+
+        if ($appointment->status !== 'scheduled') {
+            return response()->json(['message' => 'Appointment is not in scheduled status'], 400);
+        }
+
+        DB::beginTransaction();
+        try {
+            $appointment->update(['status' => 'arrived']);
+
+            $lastQueue = AppointmentQueue::whereHas('appointment', function ($query) use ($appointment) {
+                $query->where('doctorId', $appointment->doctorId)
+                      ->whereDate('appointmentDate', $appointment->appointmentDate);
+            })->orderBy('queueNumber', 'desc')->first();
+
+            $queueNumber = $lastQueue ? $lastQueue->queueNumber + 1 : 1;
+
+            $queue = AppointmentQueue::create([
+                'appointmentId' => $appointment->appointmentId,
+                'queueNumber' => $queueNumber,
+                'status' => 'waiting',
+            ]);
+
+            DB::commit();
+            return response()->json(['message' => 'Patient checked in', 'queue_number' => $queue->queue_number], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['message' => 'Failed to check in patient'], 500);
+        }
+    }
+
+
 }
