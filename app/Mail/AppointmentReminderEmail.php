@@ -36,7 +36,7 @@ class AppointmentReminderEmail extends Mailable
     public function build()
     {
         return $this->view('emails.appointment-reminder-email')
-                    ->subject('Appointment Reminder - Rachel Eye Clinic')
+                    ->subject('Appointment Reminder - Rachel Eye Center')
                     ->with([
                         'email' => $this->patientEmail,
                         'patient_name' => $this->patientName,

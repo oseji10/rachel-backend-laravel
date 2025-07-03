@@ -25,6 +25,31 @@ class ProductController extends Controller
        
     }
 
+
+    public function eyeDrops()
+    {
+        $eyedrops = Medicines::where('type', 'eye_drop')
+        ->get();
+        return response()->json($eyedrops);
+       
+    }
+
+     public function tablets()
+    {
+        $tablets = Medicines::where('type', 'tablet')
+        ->get();
+        return response()->json($tablets);
+
+    }
+
+     public function ointments()
+    {
+        $ointments = Medicines::where('type', 'ointment')
+        ->get();
+        return response()->json($ointments);
+       
+    }
+
     public function retrieveLenses()
     {
         $product = Product::where('productType', 'Opticals')->get();

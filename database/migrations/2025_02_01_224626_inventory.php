@@ -11,24 +11,24 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema :: create('inventory', function (Blueprint $table) {
-            $table -> id('inventoryId');
-            $table -> unsignedBigInteger('productId') -> nullable();
-            $table -> string('batchNumber') -> nullable();
-            $table -> string('expiryDate') -> nullable();
-            $table -> string('inventoryType') -> nullable();
-            $table -> string('quantityReceived') -> nullable();
-            $table -> string('quantitySold') -> nullable();
-            $table -> string('inventoryStatus') -> nullable();
-            $table -> string('inventoryQuantityDamaged') -> nullable();
-            $table -> string('inventoryQuantityReturned') -> nullable();
-            $table -> string('inventoryQuantityExpired') -> nullable();
-            $table -> unsignedBigInteger('uploadedBy') -> nullable();
-            $table -> timestamps();
+        // Schema :: create('inventory', function (Blueprint $table) {
+        //     $table -> id('inventoryId');
+        //     $table -> unsignedBigInteger('productId') -> nullable();
+        //     $table -> string('batchNumber') -> nullable();
+        //     $table -> string('expiryDate') -> nullable();
+        //     $table -> string('inventoryType') -> nullable();
+        //     $table -> string('quantityReceived') -> nullable();
+        //     $table -> string('quantitySold') -> nullable();
+        //     $table -> string('inventoryStatus') -> nullable();
+        //     $table -> string('inventoryQuantityDamaged') -> nullable();
+        //     $table -> string('inventoryQuantityReturned') -> nullable();
+        //     $table -> string('inventoryQuantityExpired') -> nullable();
+        //     $table -> unsignedBigInteger('uploadedBy') -> nullable();
+        //     $table -> timestamps();
 
-            $table->foreign('uploadedBy')->references('id')->on('users');
-            $table->foreign('productId')->references('productId')->on('products');
-        });
+        //     $table->foreign('uploadedBy')->references('id')->on('users');
+        //     $table->foreign('productId')->references('productId')->on('products');
+        // });
     }
 
     /**

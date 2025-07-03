@@ -35,10 +35,11 @@ public function generateCode()
 public function RetrieveAll()
 {
     // Retrieve all transactions with related billing, patient, product, and service information
-    $transactions = Billing::selectRaw('transactionId, created_at, paymentStatus, paymentMethod, GROUP_CONCAT(billingId) as billing_ids, patientId, SUM(cost*quantity) as total_cost')
+    $transactions = Billing::selectRaw('transactionId, billings.created_at, paymentStatus, paymentMethod, CONCAT(users.firstName, " ", users.lastName) as biller_info, GROUP_CONCAT(billingId) as billing_ids, patientId, SUM(cost*quantity) as total_cost')
         ->with('patient.doctor')
-        ->groupBy('transactionId', 'patientId', 'created_at', 'paymentStatus', 'paymentMethod')
-        ->orderBy('created_at', 'desc')
+        ->join('users', 'users.id', '=', 'billings.billedBy')
+        ->groupBy('transactionId', 'patientId', 'created_at', 'paymentStatus', 'paymentMethod', 'billedBy')
+        ->orderBy('billings.created_at', 'desc')
         ->get();
 
     // Loop through each transaction and fetch associated transactions

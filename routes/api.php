@@ -125,6 +125,10 @@ Route::delete('/manufacturers/{manufacturerId}', [ManufacturersController::class
 
 
 Route::get('/medicines', [ProductController::class, 'retrieveMedicines']);
+Route::get('/eyedrops', [ProductController::class, 'eyeDrops']);
+Route::get('/tablets', [ProductController::class, 'tablets']);
+Route::get('/ointments', [ProductController::class, 'ointments']);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/products', [ProductController::class, 'retrieveAll']);
     Route::post('/products', [ProductController::class, 'store']);
@@ -134,6 +138,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/lenses', [ProductController::class, 'retrieveLenses']);
     Route::get('/frames', [ProductController::class, 'retrieveFrames']);
     Route::get('/accessories', [ProductController::class, 'retrieveAccessories']);
+
    
     Route::get('/services', [ServiceController::class, 'retrieveAll']);
     Route::get('/services', [ServiceController::class, 'retrieveAll']);

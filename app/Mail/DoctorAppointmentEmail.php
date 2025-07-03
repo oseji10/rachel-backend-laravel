@@ -36,7 +36,7 @@ class DoctorAppointmentEmail extends Mailable
     public function build()
     {
         return $this->view('emails.doctor-appointment-email')
-                    ->subject('Patient Appointment Schedule - Rachel Eye Clinic')
+                    ->subject('Patient Appointment Schedule - Rachel Eye Center')
                     ->with([
                         'email' => $this->doctorEmail,
                         'patient_name' => $this->patientName,

@@ -237,86 +237,86 @@ class EncountersController extends Controller
         // Validate incoming request data
         $validated = $request->validate([
             'patientId' => 'exists:patients,patientId',
-            'visualAcuityFarPresentingRight' => 'nullable|string|max:1000',
-            'visualAcuityFarPresentingLeft' => 'nullable|string|max:1000',
-            'visualAcuityFarPinholeRight' => 'nullable|string|max:1000',
-            'visualAcuityFarPinholeLeft' => 'nullable|string|max:1000',
+            'visualAcuityFarPresentingRight' => 'nullable|max:1000',
+            'visualAcuityFarPresentingLeft' => 'nullable|max:1000',
+            'visualAcuityFarPinholeRight' => 'nullable|max:1000',
+            'visualAcuityFarPinholeLeft' => 'nullable|max:1000',
             'visualAcuityFarBestCorrectedRight' => 'nullable|max:1000',
             'visualAcuityFarBestCorrectedLeft' => 'nullable|max:1000',
             'visualAcuityNearRight' => 'nullable|max:1000',
-            'visualAcuityNearLeft' => 'nullable|string|max:1000',
+            'visualAcuityNearLeft' => 'nullable|max:1000',
             'chiefComplaintRight' => 'nullable',
             'chiefComplaintLeft' => 'nullable',
             'intraOccularPressureRight' => 'nullable|numeric',
             'intraOccularPressureLeft' => 'nullable|numeric',  
-            'otherComplaintsRight' => 'nullable|string|max:1000',
-            'otherComplaintsLeft' => 'nullable|string|max:1000',
-            'detailedHistoryRight' => 'nullable|string|max:1000',
-            'detailedHistoryLeft' => 'nullable|string|max:1000',
-            'findingsRight' => 'nullable|string|max:1000',
-            'findingsLeft' => 'nullable|string|max:1000',
-            'eyelidRight' => 'nullable|string|max:1000',
-            'eyelidLeft' => 'nullable|string|max:1000',
-            'conjunctivaRight' => 'nullable|string|max:1000',
-            'conjunctivaLeft' => 'nullable|string|max:1000',
-            'corneaRight' => 'nullable|string|max:1000',
-            'corneaLeft' => 'nullable|string|max:1000',
-            'ACRight' => 'nullable|string|max:1000',
-            'ACLeft' => 'nullable|string|max:1000',
-            'irisRight' => 'nullable|string|max:1000',
-            'irisLeft' => 'nullable|string|max:1000',
-            'pupilRight' => 'nullable|string|max:1000',
-            'pupilLeft' => 'nullable|string|max:1000',
-            'lensRight' => 'nullable|string|max:1000',
-            'lensLeft' => 'nullable|string|max:1000',
-            'vitreousRight' => 'nullable|string|max:1000',
-            'vitreousLeft' => 'nullable|string|max:1000',
-            'retinaRight' => 'nullable|string|max:1000',
-            'retinaLeft' => 'nullable|string|max:1000',
-            'otherFindingsRight' => 'nullable|string|max:1000',
-            'otherFindingsLeft' => 'nullable|string|max:1000',
-            'nearAddRight' => 'nullable|string|max:1000',
-            'nearAddLeft' => 'nullable|string|max:1000',
-            'OCTRight' => 'nullable|string|max:1000',
-            'OCTLeft' => 'nullable|string|max:1000',
-            'FFARight' => 'nullable|string|max:1000',
-            'FFALeft' => 'nullable|string|max:1000',
-            'fundusPhotographyRight' => 'nullable|string|max:1000',
-            'fundusPhotographyLeft' => 'nullable|string|max:1000',
-            'pachymetryRight' => 'nullable|string|max:1000',
-            'pachymetryLeft' => 'nullable|string|max:1000',
-            'CUFTRight' => 'nullable|string|max:1000',
-            'CUFTLeft' => 'nullable|string|max:1000',
-            'CUFTKineticRight' => 'nullable|string|max:1000',
-            'CUFTKineticLeft' => 'nullable|string|max:1000',
-            'pupilDistanceRight' => 'nullable|string|max:1000',
-            'pupilDistanceLeft' => 'nullable|string|max:1000',
-            'refractionSphereRight' => 'nullable|string|max:1000',
-            'refractionSphereLeft' => 'nullable|string|max:1000',
-            'refractionCylinderRight' => 'nullable|string|max:1000',
-            'refractionCylinderLeft' => 'nullable|string|max:1000',
-            'refractionAxisRight' => 'nullable|string|max:1000',
-            'refractionAxisLeft' => 'nullable|string|max:1000',
-            'refractionPrismRight' => 'nullable|string|max:1000',
-            'refractionPrismLeft' => 'nullable|string|max:1000',
-            'diagnosisRight' => 'nullable',
-            'diagnosisLeft' => 'nullable',
-            'investigationsRequired' => 'nullable|string',
-            'externalInvestigationRequired' => 'nullable|string',
-            'investigationsDone' => 'nullable|string',
+            'otherComplaintsRight' => 'nullable|max:1000',
+            'otherComplaintsLeft' => 'nullable|max:1000',
+            'detailedHistoryRight' => 'nullable|max:1000',
+            'detailedHistoryLeft' => 'nullable|max:1000',
+            'findingsRight' => 'nullable|max:1000',
+            'findingsLeft' => 'nullable|max:1000',
+            'eyelidRight' => 'nullable|max:1000',
+            'eyelidLeft' => 'nullable|max:1000',
+            'conjunctivaRight' => 'nullable|max:1000',
+            'conjunctivaLeft' => 'nullable|max:1000',
+            'corneaRight' => 'nullable|max:1000',
+            'corneaLeft' => 'nullable|max:1000',
+            'ACRight' => 'nullable|max:1000',
+            'ACLeft' => 'nullable|max:1000',
+            'irisRight' => 'nullable|max:1000',
+            'irisLeft' => 'nullable|max:1000',
+            'pupilRight' => 'nullable|max:1000',
+            'pupilLeft' => 'nullable|max:1000',
+            'lensRight' => 'nullable|max:1000',
+            'lensLeft' => 'nullable|max:1000',
+            'vitreousRight' => 'nullable|max:1000',
+            'vitreousLeft' => 'nullable|max:1000',
+            'retinaRight' => 'nullable|max:1000',
+            'retinaLeft' => 'nullable|max:1000',
+            'otherFindingsRight' => 'nullable|max:1000',
+            'otherFindingsLeft' => 'nullable|max:1000',
+            'nearAddRight' => 'nullable|max:1000',
+            'nearAddLeft' => 'nullable|max:1000',
+            'OCTRight' => 'nullable|max:1000',
+            'OCTLeft' => 'nullable|max:1000',
+            'FFARight' => 'nullable|max:1000',
+            'FFALeft' => 'nullable|max:1000',
+            'fundusPhotographyRight' => 'nullable|max:1000',
+            'fundusPhotographyLeft' => 'nullable|max:1000',
+            'pachymetryRight' => 'nullable|max:1000',
+            'pachymetryLeft' => 'nullable|max:1000',
+            'CUFTRight' => 'nullable|max:1000',
+            'CUFTLeft' => 'nullable|max:1000',
+            'CUFTKineticRight' => 'nullable|max:1000',
+            'CUFTKineticLeft' => 'nullable|max:1000',
+            'pupilDistanceRight' => 'nullable|max:1000',
+            'pupilDistanceLeft' => 'nullable|max:1000',
+            'refractionSphereRight' => 'nullable|max:1000',
+            'refractionSphereLeft' => 'nullable|max:1000',
+            'refractionCylinderRight' => 'nullable|max:1000',
+            'refractionCylinderLeft' => 'nullable|max:1000',
+            'refractionAxisRight' => 'nullable|max:1000',
+            'refractionAxisLeft' => 'nullable|max:1000',
+            'refractionPrismRight' => 'nullable|max:1000',
+            'refractionPrismLeft' => 'nullable|max:1000',
+            'overallDiagnosisRight' => 'nullable',
+            'overallDiagnosisLeft' => 'nullable',
+            'investigationsRequired' => 'nullable',
+            'externalInvestigationRequired' => 'nullable',
+            'investigationsDone' => 'nullable',
             'HBP' => 'nullable|boolean',
             'diabetes' => 'nullable|boolean',
             'pregnancy' => 'nullable|boolean',
             'drugAllergy' => 'nullable|boolean',
-            'currentMedication' => 'nullable|string|max:1000',
+            'currentMedication' => 'nullable|max:1000',
             'documentId' => 'nullable|exists:document_upload,documentId',
-            'treatmentType' => 'nullable|string|max:1000',
-            'dosage' => 'nullable|string|max:1000',
-            'doseDuration' => 'nullable|string|max:1000',
-            'doseInterval' => 'nullable|string|max:1000',
-            'time' => 'nullable|string|max:1000',
-            'comment' => 'nullable|string|max:1000',
-            'lensType' => 'nullable|string|max:1000',
+            'treatmentType' => 'nullable|max:1000',
+            'dosage' => 'nullable|max:1000',
+            'doseDuration' => 'nullable|max:1000',
+            'doseInterval' => 'nullable|max:1000',
+            'time' => 'nullable|max:1000',
+            'comment' => 'nullable|max:1000',
+            'lensType' => 'nullable|max:1000',
             'costOfLens' => 'nullable|numeric',
             'costOfFrame' => 'nullable|numeric',
         ]);
@@ -334,16 +334,43 @@ class EncountersController extends Controller
             // 'patientId' => $request->input('patientId'),
             'patientId' => $validated['patientId'],
         ];
-       // $encounter = Encounters::create(
-        //     ['patientId' => $encounterData['patientId']]
-        // );
+      
+     $diagnosisData = [
+    'patientId' => $validated['patientId'],
+];
+
+// Assuming overallDiagnosisRight and overallDiagnosisLeft are arrays of diagnosis IDs
+$diagnosisRight = $validated['overallDiagnosisRight'] ?? [];
+$diagnosisLeft = $validated['overallDiagnosisLeft'] ?? [];
+
+// Insert diagnoses for the right eye
+foreach ($diagnosisRight as $diagnosisId) {
+    DB::table('patient_diagnoses')->insert([
+        'patientId' => $diagnosisData['patientId'],
+        'diagnosisId' => $diagnosisId,
+        'eye' => 'right',
+        'created_at' => now(),
+    ]);
+}
+
+// Insert diagnoses for the left eye
+foreach ($diagnosisLeft as $diagnosisId) {
+    DB::table('patient_diagnoses')->insert([
+        'patientId' => $diagnosisData['patientId'],
+        'diagnosisId' => $diagnosisId,
+        'eye' => 'left',
+        'created_at' => now(),
+    ]);
+}
 
         // Perform database operations in a transaction
-        $result = DB::transaction(function () use ($validated, $consultingData, $encounterData) {
+        // $result = DB::transaction(function () use ($validated, $consultingData, $encounterData, $diagnosisData) {
             $consulting = Consulting::create($consultingData);
             $continue_consulting = ContinueConsulting::create($consultingData);
-            $diagnosis = Diagnosis::create($consultingData);
+            $diagnosis = Diagnosis::create($diagnosisData);
             $refractions = Refraction::create($consultingData);
+
+            
             $encounter = Encounters::create([
                 'patientId' => $encounterData['patientId'],
                 'consultingId' => $consulting->consultingId,
@@ -352,20 +379,31 @@ class EncountersController extends Controller
                 'refractionsId' => $refractions->refractionsId, 
             ]);
             
-            $consulting->update(['encounterId' => $encounter->encounterId]);
-            $continue_consulting->update(['encounterId' => $encounter->encounterId]);
-            $diagnosis->update(['encounterId' => $encounter->encounterId]);
+            return [
+                'consulting' => $consulting,
+                'continue_consulting' => $continue_consulting,
+                'diagnosis' => $diagnosis,
+                'refractions' => $refractions,
+                'encounters' => $encounter,
+            ];
 
-            return compact('consulting', 'continue_consulting', 'diagnosis', 'encounter', 'refractions');
-        });
+            // $consulting->update(['encounterId' => $encounter->encounterId]);
+            // $continue_consulting->update(['encounterId' => $encounter->encounterId]);
+            // $diagnosis->update(['encounterId' => $encounter->encounterId]);
+
+            // return compact('consulting', 'continue_consulting', 'diagnosis', 'encounter', 'refractions');
+        // });
 
         // Return JSON response
-        return response()->json([
-            'message' => 'Encounter records created and linked successfully.',
-            'encounter' => $result['encounter'],
-            'consulting' => $result['consulting'],
-            'continue_consulting' => $result['continue_consulting'],
-        ], 201);
+        // return response()->json([
+        //     'message' => 'Encounter records created and linked successfully.',
+        //     'encounter' => $result['encounter'],
+        //     'consulting' => $result['consulting'],
+        //     'continue_consulting' => $result['continue_consulting'],
+        // ], 201);
+
+        
+
     } catch (\Exception $e) {
         return response()->json([
             'message' => 'Failed to create records: ' . $e->getMessage(),

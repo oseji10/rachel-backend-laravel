@@ -27,7 +27,7 @@ class Encounters extends Model
         return $this->hasOne(Refraction::class, 'refractionId', 'refractionId');
     }
 
-    public function diagnoses()
+    public function diagnosis()
     {
         return $this->hasOne(Diagnosis::class, 'diagnosisId', 'diagnosisId');
     }

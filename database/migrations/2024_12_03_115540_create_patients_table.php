@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('patients', function (Blueprint $table) {
             $table->id('patientId');
+
+            $table->string('patientUID')->unique(); // Unique identifier for the patient
             $table->string('hospitalFileNumber')->nullable();
             $table->string('firstName')->nullable();
             $table->string('lastName')->nullable();

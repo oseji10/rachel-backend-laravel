@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Patients;
 use App\Models\Doctors;
 use App\Models\HMOs;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+
 class PatientsController extends Controller
 {
     public function RetrieveAll(Request $request)
@@ -65,10 +68,10 @@ class PatientsController extends Controller
 
     public function store(Request $request)
     {
-        // Directly get the data from the request
+        $patientId = Str::random(6);
         $data = $request->all();
     
-        // Create a new user with the data (ensure that the fields are mass assignable in the model)
+        $data['patientUID'] = $patientId; // Assign the generated patientId
         $patients = Patients::create($data);
     
         // Return a response, typically JSON

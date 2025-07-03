@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Rachel Eye Clinic</title>
+    <title>Rachel Eye Center</title>
     <style>
         body { font-family: Arial, sans-serif; text-align: left; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
@@ -12,7 +12,7 @@
 </head>
 <body>
 
-    <h1 class="center-text">Rachel Eye Clinic</h1>
+    <h1 class="center-text">Rachel Eye Center</h1>
     <h2 class="center-text">Billing Receipt</h2>
 
     <h3>Patient Details</h3>

@@ -458,7 +458,7 @@
                     <td class="content-cell">
                       <div class="f-fallback">
                         <h1>Hi, {{$doctor_name}}!</h1>
-                        <p>An appointment has just been assigned to you at <b>Rachel Eye Clinic</b>. Please see details of this appointment below:</p>
+                        <p>An appointment has just been assigned to you at <b>Rachel Eye Center</b>. Please see details of this appointment below:</p>
                         <!-- Action -->
                         <table class="body-action" align="center" width="100%" cellpadding="0" cellspacing="0" role="presentation">
                           <tr>

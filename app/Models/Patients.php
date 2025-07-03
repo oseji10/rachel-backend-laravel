@@ -11,7 +11,7 @@ class Patients extends Model
     use SoftDeletes;
     public $table = 'patients';
     protected $primaryKey = 'patientId';
-    protected $fillable = ['firstName', 'lastName', 'otherNames', 'phoneNumber', 'email', 'gender', 'cardNumber', 'address', 'occupation', 'hospitalFileNumber', 'dateOfBirth', 'doctor', 'status', 'hmoId'];
+    protected $fillable = ['patientUID', 'firstName', 'lastName', 'otherNames', 'phoneNumber', 'email', 'gender', 'cardNumber', 'address', 'occupation', 'hospitalFileNumber', 'dateOfBirth', 'doctor', 'status', 'hmoId'];
     protected $dates = ['deleted_at'];
 
 
