@@ -4,7 +4,8 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-
+use Tymon\JWTAuth\Contracts\Providers\JWT as JWTContract;
+use Tymon\JWTAuth\Providers\JWT\Lcobucci;
 class AuthServiceProvider extends ServiceProvider
 {
     /**
@@ -23,4 +24,17 @@ class AuthServiceProvider extends ServiceProvider
     {
         //
     }
+
+    public function register()
+{
+    $this->app->bind(JWTContract::class, function ($app) {
+        return new Lcobucci(
+            $app['config']['jwt.secret'],
+            $app['config']['jwt.algo'],
+            $app['config']['jwt.keys'],
+            $app['config']['jwt.required_claims']
+        );
+    });
 }
+}
+
