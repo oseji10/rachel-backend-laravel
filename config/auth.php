@@ -42,7 +42,7 @@ return [
         ],
 
         'api' => [
-        'driver' => 'sanctum', // Ensure Sanctum is the driver
+        'driver' => 'jwt', // Ensure Sanctum is the driver
         'provider' => 'users',
     ],
     ],
@@ -67,7 +67,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => App\Models\Users::class,
         ],
 
         // 'users' => [

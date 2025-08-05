@@ -15,7 +15,9 @@ class Diagnosis extends Model
         'diagnosisLeft',
         'diagnosisRight',
         'problemsRight',
-        'problemsLeft'
+        'problemsLeft',
+        'overallDiagnosisRight',
+        'overallDiagnosisLeft',
     ];
     protected $primaryKey = 'diagnosisId';
     public function encounters()

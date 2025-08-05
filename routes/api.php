@@ -44,10 +44,23 @@ use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
+ Route::middleware(['auth.jwt'])->group(function () {
+Route::get('/user', function () {
+            $user = auth('api')->user();
+            return response()->json([
+                'firstName' => $user->firstName,
+                'lastName' => $user->lastName,
+                'email' => $user->email,
+                'role' => $user->user_role->roleName,
+                'id' => $user->id,
+                'message' => 'User authenticated successfully',
+            ]);
+        });
+ });
 
 Route::get('/visual_acuity_far', [VisualAcuityFarController::class, 'retrieveAll']);
 Route::post('/visual_acuity_far', [VisualAcuityFarController::class, 'store']);
@@ -196,7 +209,7 @@ Route::post('/investigations', [InvestigationController::class, 'store']);
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/register', [AuthController::class, 'register']);
-Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'user']);
+// Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'user']);
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 Route::middleware('auth:sanctum')->post('/change-password', [AuthController::class, 'changePassword']);
 Route::put('/update-profile', [AuthController::class, 'updateProfile']);
@@ -204,3 +217,4 @@ Route::put('/update-profile', [AuthController::class, 'updateProfile']);
 Route::get('/prescriptions', [TreatmentController::class, 'getPrescriptions']);
 
 Route::get('/sanctum/csrf-cookie', [CsrfCookieController::class, 'show']);
+

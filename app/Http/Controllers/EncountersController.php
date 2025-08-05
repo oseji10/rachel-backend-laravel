@@ -13,6 +13,7 @@ use App\Models\Refraction;
 use App\Models\Diagnosis;
 use App\Models\Investigation;
 use App\Models\Findings;
+use App\Models\Sketch;
 
 class EncountersController extends Controller
 {
@@ -304,10 +305,10 @@ class EncountersController extends Controller
             'investigationsRequired' => 'nullable',
             'externalInvestigationRequired' => 'nullable',
             'investigationsDone' => 'nullable',
-            'HBP' => 'nullable|boolean',
-            'diabetes' => 'nullable|boolean',
-            'pregnancy' => 'nullable|boolean',
-            'drugAllergy' => 'nullable|boolean',
+            'HBP' => 'nullable',
+            'diabetes' => 'nullable',
+            'pregnancy' => 'nullable',
+            'drugAllergy' => 'nullable',
             'currentMedication' => 'nullable|max:1000',
             'documentId' => 'nullable|exists:document_upload,documentId',
             'treatmentType' => 'nullable|max:1000',
@@ -319,6 +320,11 @@ class EncountersController extends Controller
             'lensType' => 'nullable|max:1000',
             'costOfLens' => 'nullable|numeric',
             'costOfFrame' => 'nullable|numeric',
+            'rightEyeFront' => 'nullable|string',
+            'rightEyeBack' => 'nullable|string',
+            'leftEyeFront' => 'nullable|string',
+            'leftEyeBack' => 'nullable|string',
+
         ]);
 
         // Use only validated data for mass assignment
@@ -337,72 +343,47 @@ class EncountersController extends Controller
       
      $diagnosisData = [
     'patientId' => $validated['patientId'],
+    'overallDiagnosisRight' => $validated['overallDiagnosisRight'] ?? null,
+    'overallDiagnosisLeft' => $validated['overallDiagnosisLeft'] ?? null,
 ];
 
-// Assuming overallDiagnosisRight and overallDiagnosisLeft are arrays of diagnosis IDs
-$diagnosisRight = $validated['overallDiagnosisRight'] ?? [];
-$diagnosisLeft = $validated['overallDiagnosisLeft'] ?? [];
+$sketchData = [
+    'patientId' => $validated['patientId'],
+    'rightEyeFront' => $validated['rightEyeFront'] ?? null,
+    'rightEyeBack' => $validated['rightEyeBack'] ?? null,
+    'leftEyeFront' => $validated['leftEyeFront'] ?? null,
+    'leftEyeBack' => $validated['leftEyeBack'] ?? null,
+];
 
-// Insert diagnoses for the right eye
-foreach ($diagnosisRight as $diagnosisId) {
-    DB::table('patient_diagnoses')->insert([
-        'patientId' => $diagnosisData['patientId'],
-        'diagnosisId' => $diagnosisId,
-        'eye' => 'right',
-        'created_at' => now(),
-    ]);
-}
 
-// Insert diagnoses for the left eye
-foreach ($diagnosisLeft as $diagnosisId) {
-    DB::table('patient_diagnoses')->insert([
-        'patientId' => $diagnosisData['patientId'],
-        'diagnosisId' => $diagnosisId,
-        'eye' => 'left',
-        'created_at' => now(),
-    ]);
-}
 
         // Perform database operations in a transaction
         // $result = DB::transaction(function () use ($validated, $consultingData, $encounterData, $diagnosisData) {
-            $consulting = Consulting::create($consultingData);
-            $continue_consulting = ContinueConsulting::create($consultingData);
-            $diagnosis = Diagnosis::create($diagnosisData);
-            $refractions = Refraction::create($consultingData);
+       $result = DB::transaction(function () use ($validated, $consultingData, $encounterData, $diagnosisData, $sketchData) {
+    $consulting = Consulting::create($consultingData);
+    $continue_consulting = ContinueConsulting::create($consultingData);
+    $diagnosis = Diagnosis::create($diagnosisData);
+    $sketch = Sketch::create($sketchData);
 
-            
-            $encounter = Encounters::create([
-                'patientId' => $encounterData['patientId'],
-                'consultingId' => $consulting->consultingId,
-                'continueConsultingId' => $continue_consulting->continueConsultingId,
-                'diagnosisId' => $diagnosis->diagnosisId,
-                'refractionsId' => $refractions->refractionsId, 
-            ]);
-            
-            return [
-                'consulting' => $consulting,
-                'continue_consulting' => $continue_consulting,
-                'diagnosis' => $diagnosis,
-                'refractions' => $refractions,
-                'encounters' => $encounter,
-            ];
+    $refractions = Refraction::create($consultingData);
 
-            // $consulting->update(['encounterId' => $encounter->encounterId]);
-            // $continue_consulting->update(['encounterId' => $encounter->encounterId]);
-            // $diagnosis->update(['encounterId' => $encounter->encounterId]);
+    $encounter = Encounters::create([
+        'patientId' => $encounterData['patientId'],
+        'consultingId' => $consulting->consultingId,
+        'continueConsultingId' => $continue_consulting->continueConsultingId,
+        'diagnosisId' => $diagnosis->diagnosisId,
+        'sketchId' => $sketch->sketchId,
+    ]);
 
-            // return compact('consulting', 'continue_consulting', 'diagnosis', 'encounter', 'refractions');
-        // });
+    return compact('consulting', 'continue_consulting', 'diagnosis', 'refractions', 'encounter');
+});
 
-        // Return JSON response
-        // return response()->json([
-        //     'message' => 'Encounter records created and linked successfully.',
-        //     'encounter' => $result['encounter'],
-        //     'consulting' => $result['consulting'],
-        //     'continue_consulting' => $result['continue_consulting'],
-        // ], 201);
+return response()->json([
+    'message' => 'Encounter records created and linked successfully.',
+    'data' => $result,
+], 201);
 
-        
+
 
     } catch (\Exception $e) {
         return response()->json([

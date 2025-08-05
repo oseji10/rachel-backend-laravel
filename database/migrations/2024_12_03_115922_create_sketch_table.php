@@ -17,10 +17,17 @@ return new class extends Migration
         $table->id('sketchId');
         $table->unsignedBigInteger('patientId')->nullable();
         $table->unsignedBigInteger('encounterId')->nullable();
-        $table->string('right_eye_front');
-        $table->string('right_eye_back');
-        $table->string('left_eye_front');
-        $table->string('left_eye_back');
+        // $table->string('right_eye_front');
+        // $table->string('right_eye_back');
+        // $table->string('left_eye_front');
+        // $table->string('left_eye_back');
+
+        // migration
+$table->longText('rightEyeFront')->nullable();
+$table->longText('rightEyeBack')->nullable();
+$table->longText('leftEyeFront')->nullable();
+$table->longText('leftEyeBack')->nullable();
+
         $table->timestamps();
         $table->softDeletes();
 

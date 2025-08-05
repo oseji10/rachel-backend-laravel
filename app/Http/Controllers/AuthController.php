@@ -6,60 +6,131 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use App\Models\Users;
 use App\Models\Doctors;
+use Illuminate\Support\Str;
+use Tymon\JWTAuth\JWTAuth;
+use Tymon\JWTAuth\Exceptions\JWTException;
+
+// use Tymon\JWTAuth\Facades\JWTAuth; // Ensure the facade is imported
+use App\Models\RefreshToken;    
+use Carbon\Carbon;
 
 class AuthController extends Controller
 {
-    // Login
-    // public function login(Request $request)
-    // {
-    //     $credentials = $request->validate([
-    //         'email' => 'required|email',
-    //         'password' => 'required',
-    //     ]);
+protected $jwt;
 
-    //     if (Auth::attempt($credentials)) {
-    //         $user = Auth::user();
-    //         $token = $user->createToken('authToken')->plainTextToken;
+    public function __construct(JWTAuth $jwt)
+    {
+        $this->jwt = $jwt;
+    }
 
-    //         return response()->json([
-    //             'user' => $user,
-    //             'token' => $token,
-    //         ]);
-    //     }
-
-    //     return response()->json(['error' => 'Invalid credentials'], 401);
-    // }
-
-    public function login(Request $request)
+    
+  public function login(Request $request)
 {
     $request->validate([
-        'email' => 'required|email',
+        'email' => 'required',
         'password' => 'required',
     ]);
 
-    $user = Users::where('email', $request->email)->first();
+    // Find user by email or phone number with staff and role relationships
+    $user = Users::where('email', $request->email)
+                // ->orWhere('phoneNumber', $request->username)
+                ->first();
 
-    if (!$user || !Hash::check($request->password, $user->password)) {
+    if (!$user) {
         throw ValidationException::withMessages([
-            'email' => ['The provided credentials are incorrect.'],
+            'username' => ['No account found with this email or phone number.'],
         ]);
     }
 
-    // Create a Sanctum token
-    $token = $user->createToken('auth-token')->plainTextToken;
+    // Attempt JWT authentication
+    $credentials = [
+        'email' => $user->email,
+        'password' => $request->password,
+    ];
 
-    return response()->json([
-        'user' => $user,
-        'token' => $token,
+    if (!$accessToken = auth('api')->attempt($credentials)) {
+        return response()->json(['error' => 'Invalid credentials'], 401);
+    }
+
+    // Generate refresh token
+    $refreshToken = Str::random(64);
+    $user = auth('api')->user()->load(['user_role']); // Reload relationships
+
+    // Store refresh token in database
+    RefreshToken::create([
+        'user_id' => $user->id,
+        'token' => $refreshToken,
+        'expires_at' => Carbon::now()->addDays(14),
     ]);
+
+    // Hide sensitive data
+    $user->makeHidden(['password']);
+
+    // Return response with cookies
+    return response()->json([
+        'message' => 'Logged in',
+        'firstName' => $user->firstName ?? '',
+        'lastName' => $user->lastName ?? '',
+        'email' => $user->email ?? '',
+        'phoneNumber' => $user->phoneNumber ?? '',
+        // 'role' => $user->role ? $user->role->roleName ?? '' : '', // Safe access
+        'role' => $user->user_role->roleName ?? '',
+        // 'applicationType' => $user->application_type  ? $user->application_type->typeName ?? '' : null, // Safe access
+        // 'lga' => $user->staff && $user->staff->lga ? $user->staff->lga_info->lgaName ?? '' : null, // Safe access
+        'access_token' => $accessToken,
+    ])
+        ->cookie('access_token', $accessToken, 30, null, null, true, true, false, 'strict')
+        ->cookie('refresh_token', $refreshToken, 14 * 24 * 60, null, null, true, true, false, 'strict');
 }
 
-    // Logout
+    public function refresh(Request $request)
+    {
+        $refreshToken = $request->cookie('refresh_token');
+
+        if (!$refreshToken) {
+            return response()->json(['error' => 'Refresh token missing'], 401);
+        }
+
+        // Verify refresh token
+        $tokenRecord = RefreshToken::where('token', $refreshToken)
+            ->where('expires_at', '>', Carbon::now())
+            ->first();
+
+        if (!$tokenRecord) {
+            return response()->json(['error' => 'Invalid or expired refresh token'], 401);
+        }
+
+        // Generate new access token
+        $user = Users::find($tokenRecord->user_id);
+        // $newAccessToken = JWTAuth::fromUser($user);
+        $newAccessToken = $this->jwt->fromUser($user);
+        
+
+        // Optionally, issue a new refresh token and invalidate the old one
+        $newRefreshToken = Str::random(64);
+        $tokenRecord->update([
+            'token' => $newRefreshToken,
+            'expires_at' => Carbon::now()->addDays(14),
+        ]);
+
+        return response()->json(['message' => 'Token refreshed'])
+            ->cookie('access_token', $newAccessToken, 15, null, null, true, true, false, 'strict')
+            ->cookie('refresh_token', $newRefreshToken, 14 * 24 * 60, null, null, true, true, false, 'strict');
+    }
+      
+
+  
     public function logout(Request $request)
     {
-        $request->user()->tokens()->delete();
+        $refreshToken = $request->cookie('refresh_token');
 
-        return response()->json(['message' => 'Logged out successfully']);
+        if ($refreshToken) {
+            RefreshToken::where('token', $refreshToken)->delete();
+        }
+
+        return response()->json(['message' => 'Logged out'])
+            ->cookie('access_token', '', -1)
+            ->cookie('refresh_token', '', -1);
     }
 
     // Get authenticated user
@@ -67,6 +138,45 @@ class AuthController extends Controller
     {
         return response()->json($request->user());
     }
+
+
+//     public function login(Request $request)
+// {
+//     $request->validate([
+//         'email' => 'required|email',
+//         'password' => 'required',
+//     ]);
+
+//     $user = Users::where('email', $request->email)->first();
+
+//     if (!$user || !Hash::check($request->password, $user->password)) {
+//         throw ValidationException::withMessages([
+//             'email' => ['The provided credentials are incorrect.'],
+//         ]);
+//     }
+
+//     // Create a Sanctum token
+//     $token = $user->createToken('auth-token')->plainTextToken;
+
+//     return response()->json([
+//         'user' => $user,
+//         'token' => $token,
+//     ]);
+// }
+
+//     // Logout
+//     public function logout(Request $request)
+//     {
+//         $request->user()->tokens()->delete();
+
+//         return response()->json(['message' => 'Logged out successfully']);
+//     }
+
+    // Get authenticated user
+    // public function user(Request $request)
+    // {
+    //     return response()->json($request->user());
+    // }
 
 
     public function register(Request $request)

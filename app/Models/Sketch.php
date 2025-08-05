@@ -9,7 +9,7 @@ class Sketch extends Model
 {
     use HasFactory;
     public $table = 'sketch';
-    protected $fillable = ['sketchId','patientId', 'encounterId', 'right_eye_front', 'right_eye_back', 'left_eye_front', 'left_eye_back'];
+    protected $fillable = ['sketchId','patientId', 'encounterId', 'rightEyeFront', 'rightEyeBack', 'leftEyeFront', 'leftEyeBack'];
     protected $primaryKey = 'sketchId';
   
 }
