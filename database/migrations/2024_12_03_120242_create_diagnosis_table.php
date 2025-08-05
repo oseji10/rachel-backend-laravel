@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('diagnosis', function (Blueprint $table) {
             $table->id('diagnosisId');
             $table->unsignedBigInteger('patientId')->nullable();
-            $table->unsignedBigInteger('encounterId')->nullable();
+            $table->string('encounterId')->nullable();
             $table->unsignedBigInteger('diagnosisRight')->nullable();
             $table->unsignedBigInteger('diagnosisLeft')->nullable();
             $table->string('problemsRight')->nullable();
@@ -22,7 +22,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('patientId')->references('patientId')->on('patients')->onDelete('cascade');
-            $table->foreign('encounterId')->references('encounterId')->on('encounters')->onDelete('cascade');
+            // $table->foreign('encounterId')->references('encounterId')->on('encounters')->onDelete('cascade');
 
             $table->foreign('diagnosisRight')->references('id')->on('diagnosis_list')->onDelete('cascade');
             $table->foreign('diagnosisLeft')->references('id')->on('diagnosis_list')->onDelete('cascade');

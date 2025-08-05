@@ -15,7 +15,7 @@ return new class extends Migration
 
             $table->id('consultingId');
 $table->unsignedBigInteger('patientId')->nullable();
-$table->unsignedBigInteger('encounterId')->nullable();
+$table->string('encounterId')->nullable();
 $table->unsignedBigInteger('visualAcuityFarPresentingRight')->nullable();
 $table->unsignedBigInteger('visualAcuityFarPresentingLeft')->nullable();
 $table->unsignedBigInteger('visualAcuityFarPinholeRight')->nullable();
@@ -27,7 +27,7 @@ $table->unsignedBigInteger('visualAcuityNearLeft')->nullable();
 $table->timestamps();
 $table->softDeletes();
 $table->foreign('patientId')->references('patientId')->on('patients')->onDelete('cascade');
-$table->foreign('encounterId')->references('encounterId')->on('encounters')->onDelete('cascade');
+// $table->foreign('encounterId')->references('encounterId')->on('encounters')->onDelete('cascade');
 $table->foreign('visualAcuityFarPresentingRight')->references('id')->on('visual_acuity_far')->onDelete('cascade');
 $table->foreign('visualAcuityFarPresentingLeft')->references('id')->on('visual_acuity_far')->onDelete('cascade');
 $table->foreign('visualAcuityFarPinholeRight')->references('id')->on('visual_acuity_far')->onDelete('cascade');

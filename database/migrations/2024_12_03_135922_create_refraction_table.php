@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('refractions', function (Blueprint $table) {
             $table->id('refractionId');
             $table->unsignedBigInteger('patientId')->nullable();
-            $table->unsignedBigInteger('encounterId')->nullable();
+            $table->string('encounterId')->nullable();
             $table->string('pd')->nullable();
             $table->string('bridge')->nullable();
             $table->string('eyeSize')->nullable();
@@ -47,7 +47,7 @@ return new class extends Migration
             $table->softDeletes();
 
             $table->foreign('patientId')->references('patientId')->on('patients')->onDelete('cascade');
-            $table->foreign('encounterId')->references('encounterId')->on('encounters')->onDelete('cascade');
+            // $table->foreign('encounterId')->references('encounterId')->on('encounters')->onDelete('cascade');
             $table->foreign('nearAddRight')->references('id')->on('refraction_sphere')->onDelete('cascade');
             $table->foreign('nearAddLeft')->references('id')->on('refraction_sphere')->onDelete('cascade');
 

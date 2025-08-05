@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('investigations', function (Blueprint $table) {
             $table->id('investigationId');
             $table->unsignedBigInteger('patientId')->nullable();
-            $table->unsignedBigInteger('encounterId')->nullable();
+            $table->string('encounterId')->nullable();
             $table->text('investigationsRequired')->nullable();
             $table->text('externalInvestigationRequired')->nullable();
             $table->text('investigationsDone')->nullable();
@@ -28,7 +28,7 @@ return new class extends Migration
             $table->softDeletes();
 
             $table->foreign('patientId')->references('patientId')->on('patients')->onDelete('cascade');
-            $table->foreign('encounterId')->references('encounterId')->on('encounters')->onDelete('cascade');
+            // $table->foreign('encounterId')->references('encounterId')->on('encounters')->onDelete('cascade');
             $table->foreign('documentId')->references('documentId')->on('document_upload')->onDelete('cascade');
         });
     }

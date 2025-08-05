@@ -16,7 +16,7 @@ return new class extends Migration
             $table->bigInteger('treatmentId')->nullable();
 
             $table->unsignedBigInteger('patientId')->nullable();
-            $table->unsignedBigInteger('encounterId')->nullable();
+            $table->string('encounterId')->nullable();
             $table->string('treatmentType')->nullable();
             $table->string('medicine')->nullable();
             $table->string('dosage')->nullable();
@@ -31,17 +31,17 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('patientId')->references('patientId')->on('patients')->onDelete('cascade');
-            $table->foreign('encounterId')->references('encounterId')->on('encounters')->onDelete('cascade');
+            // $table->foreign('encounterId')->references('encounterId')->on('encounters')->onDelete('cascade');
 
         });
 
 
-        Schema::table('encounters', function (Blueprint $table) {
-            // $table->dropForeign(['treatmentId']);
-            // $table->dropColumn('treatmentId');
-            $table->bigInteger('treatmentId')->nullable();
-            // $table->foreign('treatmentId')->references('id')->on('treatment')->onDelete('cascade');
-            });
+        // Schema::table('encounters', function (Blueprint $table) {
+        //     // $table->dropForeign(['treatmentId']);
+        //     // $table->dropColumn('treatmentId');
+        //     $table->bigInteger('treatmentId')->nullable();
+        //     // $table->foreign('treatmentId')->references('id')->on('treatment')->onDelete('cascade');
+        //     });
     }
 
     /**

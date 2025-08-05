@@ -16,7 +16,7 @@ return new class extends Migration
     Schema::create('sketch', function (Blueprint $table) {
         $table->id('sketchId');
         $table->unsignedBigInteger('patientId')->nullable();
-        $table->unsignedBigInteger('encounterId')->nullable();
+        $table->string('encounterId')->nullable();
         // $table->string('right_eye_front');
         // $table->string('right_eye_back');
         // $table->string('left_eye_front');
@@ -32,7 +32,7 @@ $table->longText('leftEyeBack')->nullable();
         $table->softDeletes();
 
         $table->foreign('patientId')->references('patientId')->on('patients')->onDelete('cascade');
-        $table->foreign('encounterId')->references('encounterId')->on('encounters')->onDelete('cascade');
+        // $table->foreign('encounterId')->references('encounterId')->on('encounters')->onDelete('cascade');
 
     });
 }

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('continue_consulting', function (Blueprint $table) {
             $table->id('continueConsultingId');
             $table->unsignedBigInteger('patientId')->nullable();
-            $table->unsignedBigInteger('encounterId')->nullable();
+            $table->string('encounterId')->nullable();
             $table->text('intraOccularPressureRight')->nullable();
             $table->text('intraOccularPressureLeft')->nullable();
             $table->text('otherComplaintsRight')->nullable();
@@ -50,7 +50,7 @@ return new class extends Migration
             $table->softDeletes();
             
             $table->foreign('patientId')->references('patientId')->on('patients')->onDelete('cascade');
-            $table->foreign('encounterId')->references('encounterId')->on('encounters')->onDelete('cascade');
+            // $table->foreign('encounterId')->references('encounterId')->on('encounters')->onDelete('cascade');
             $table->foreign('chiefComplaintRight')->references('id')->on('chief_complaint')->onDelete('cascade');
             $table->foreign('chiefComplaintLeft')->references('id')->on('chief_complaint')->onDelete('cascade');
             
