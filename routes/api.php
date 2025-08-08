@@ -60,7 +60,7 @@ Route::get('/user', function () {
                 'message' => 'User authenticated successfully',
             ]);
         });
- });
+
 
 Route::get('/visual_acuity_far', [VisualAcuityFarController::class, 'retrieveAll']);
 Route::post('/visual_acuity_far', [VisualAcuityFarController::class, 'store']);
@@ -142,6 +142,13 @@ Route::get('/eyedrops', [ProductController::class, 'eyeDrops']);
 Route::get('/tablets', [ProductController::class, 'tablets']);
 Route::get('/ointments', [ProductController::class, 'ointments']);
 
+
+    Route::get('/billings', [BillingController::class, 'retrieveAll']);
+Route::post('/billings', [BillingController::class, 'store']);
+Route::put('/billings/{id}', [BillingController::class, 'update']);
+Route::delete('/billings/{transactionId}', [BillingController::class, 'deleteBilling']);
+
+ });
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/products', [ProductController::class, 'retrieveAll']);
     Route::post('/products', [ProductController::class, 'store']);
@@ -175,10 +182,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/bill-patient', [BillingController::class, 'store']);
     Route::post('/confirm-payment', [BillingController::class, 'updateBillingStatus']);
 
-    Route::get('/billings', [BillingController::class, 'retrieveAll']);
-Route::post('/billings', [BillingController::class, 'store']);
-Route::put('/billings/{id}', [BillingController::class, 'update']);
-Route::delete('/billings/{transactionId}', [BillingController::class, 'deleteBilling']);
+
 // Route::delete('/billings', [BillingController::class, 'delete']);
 });
 Route::get('/print-receipt/{transactionId}', [BillingController::class, 'printBilling']);
