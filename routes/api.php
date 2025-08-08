@@ -148,8 +148,7 @@ Route::post('/billings', [BillingController::class, 'store']);
 Route::put('/billings/{id}', [BillingController::class, 'update']);
 Route::delete('/billings/{transactionId}', [BillingController::class, 'deleteBilling']);
 
- });
-Route::middleware('auth:sanctum')->group(function () {
+
     Route::get('/products', [ProductController::class, 'retrieveAll']);
     Route::post('/products', [ProductController::class, 'store']);
     Route::put('/products/{id}', [ProductController::class, 'update']);
@@ -181,6 +180,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/bill-patient', [BillingController::class, 'store']);
     Route::post('/confirm-payment', [BillingController::class, 'updateBillingStatus']);
+
+    
+ });
+Route::middleware('auth:sanctum')->group(function () {
 
 
 // Route::delete('/billings', [BillingController::class, 'delete']);
