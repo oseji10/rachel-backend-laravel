@@ -10,7 +10,7 @@ class Doctors extends Model
     use HasFactory;
     public $table = 'doctors';
     protected $fillable = ['doctorName','title', 'department', 'status', 'userId'];
-
+    protected $primaryKey = 'doctorId';
     public function patients()
     {
         return $this->hasMany(Patients::class, 'doctor', 'doctorId');

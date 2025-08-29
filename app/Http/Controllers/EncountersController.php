@@ -486,6 +486,7 @@ class EncountersController extends Controller
     $diagnosis->update(['encounterId' => $encounter->encounterId]);
     $sketch->update(['encounterId' => $encounter->encounterId]);
 
+    
     return compact(
         'consulting', 
         'continueConsulting', 

@@ -87,7 +87,14 @@ public function printBilling($transactionId)
 
 public function updateBillingStatus(Request $request)
 {
-    // Find the transactions by transactionId
+    // Validate input
+    $request->validate([
+        'transactionId' => 'required|string',
+        'paymentMethod' => 'required|string',
+        'paymentReference' => 'required|string',
+    ]);
+
+    // Find transactions
     $transactions = Billing::where('transactionId', $request->transactionId)->get();
 
     if ($transactions->isEmpty()) {
@@ -95,25 +102,31 @@ public function updateBillingStatus(Request $request)
             'error' => 'Transactions not found',
         ], 404);
     }
-    $data = $request->all();
-    $data['paymentStatus'] = 'paid'; // Set paymentStatus to 'paid'
-    $data['paymentDate'] = now(); // Set paymentDate to current date
 
-    // Update each transaction in the collection
+    $updateData = [
+        'paymentStatus'   => 'paid',
+        'paymentDate'     => now(),
+        'paymentMethod'   => $request->paymentMethod,
+        'paymentReference'=> $request->paymentReference,
+    ];
+
+    // Update each record
     foreach ($transactions as $transaction) {
-        $transaction->update($data);
+        $transaction->update($updateData);
     }
 
     return response()->json([
         'message' => 'Transactions updated successfully',
-        'data' => $transactions,
+        'data'    => $transactions,
     ], 200);
 }
+
 
 
     public function store(Request $request)
     {
 
+        // return $userId = auth('api')->user()->id;
      // Generate a unique transaction ID
     $transactionId = strtoupper(Str::random(2)) . mt_rand(1000000000, 9999999999);
 
@@ -169,7 +182,7 @@ public function updateBillingStatus(Request $request)
                         'inventoryId'   => $item['inventoryId'],
                         'quantity'      => $item['quantity'],
                         'cost'          => $totalCost,
-                        'billedBy'      => Auth::user()->id,
+                        'billedBy'      => auth('api')->user()->id,
                         'paymentStatus' => 'pending',
                     ]);
     
@@ -195,7 +208,7 @@ public function updateBillingStatus(Request $request)
                         'categoryType'  => $item['categoryType'],
                         'quantity'      => $item['quantity'],
                         'cost'          => $totalCost,
-                        'billedBy'      => Auth::user()->id,
+                        'billedBy'      => auth('api')->user()->id,
                         'paymentStatus' => 'pending',
                     ]);
                 }

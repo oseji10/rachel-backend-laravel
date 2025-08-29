@@ -10,7 +10,7 @@ class AppointmentQueue extends Model
     use HasFactory;
     public $table = 'appointment_queues';
     protected $primaryKey = 'queueId';
-    protected $fillable = ['queueId','patientId', 'queueNumber', 'scheduledBy'];
+    protected $fillable = ['queueId','patientId', 'queueNumber', 'scheduledBy', 'appointmentId', 'attendedTo', 'status', 'doctorId'];
 
     public function patients()
     {
@@ -22,9 +22,14 @@ class AppointmentQueue extends Model
         return $this->belongsTo(User::class, 'scheduledBy', 'id');
     }
 
+    public function doctors()
+    {
+        return $this->belongsTo(Doctors::class, 'doctorId', 'doctorId');
+    }
+
     public function appointment()
     {
-        return $this->belongsTo(Appointments::class);
+        return $this->belongsTo(Appointments::class, 'appointmentId', 'appointmentId');
     }
 
     

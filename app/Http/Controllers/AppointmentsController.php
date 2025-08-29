@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Mail;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Queue;
 use App\Jobs\SendSMSJob;
+use DB;
+use App\Models\AppointmentQueue;
+use Illuminate\Support\Facades\Log;
+use App\Models\Patient;
 
 class AppointmentsController extends Controller
 {
@@ -128,7 +132,7 @@ private function sendSMS($patientPhone, $smsMessage)
                 'appointmentId' => $appointment->appointmentId, // Assuming id is the primary key of ContinueConsulting
             ]);
             
-            $patient = Patient::where('patientId', $encounter->patientId)->first();
+            $patient = Patients::where('patientId', $encounter->patientId)->first();
             $patientEmail = $patient->email;
             $patientName = $patient->firstname . ' ' . $patient->lastname;
             $appointmentDate = $appointment->appointmentDate;
@@ -180,6 +184,7 @@ return response()->json($appointment, 201);
             return response()->json(['message' => 'Appointment is not in scheduled status'], 400);
         }
 
+        
         DB::beginTransaction();
         try {
             $appointment->update(['status' => 'arrived']);
@@ -193,17 +198,71 @@ return response()->json($appointment, 201);
 
             $queue = AppointmentQueue::create([
                 'appointmentId' => $appointment->appointmentId,
+                'patientId' => $appointment->patientId,
+                'doctorId' => $appointment->doctor,
                 'queueNumber' => $queueNumber,
                 'status' => 'waiting',
             ]);
 
+            $patient = Patients::where('patientId', $appointment->patientId)->first();
+
             DB::commit();
-            return response()->json(['message' => 'Patient checked in', 'queue_number' => $queue->queue_number], 200);
+            return response()->json(['message' => 'Patient checked in', 'queueNumber' => $queue->queueNumber, 'patient' => $patient], 200);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['message' => 'Failed to check in patient'], 500);
         }
     }
+
+    public function checkedInAppointments()
+    {
+        $appointments = AppointmentQueue::with(['patients', 'doctors'])
+            ->where('status', 'waiting')
+            ->where('created_at', '>=', now()->startOfDay())
+            ->orderBy('queueNumber', 'asc')
+            ->get();
+
+        return response()->json($appointments);
+    }
+
+
+    public function deleteFromQueue($queueId)
+{
+    DB::beginTransaction();
+    try {
+        // Find the queue record
+        $queue = AppointmentQueue::findOrFail($queueId);
+
+        $doctorId = $queue->doctorId;
+        $appointmentDate = $queue->appointment->appointmentDate;
+        $deletedQueueNumber = $queue->queueNumber;
+
+        // Delete the patient from queue
+        $queue->delete();
+
+        // Reorder remaining queues for that doctor on that date
+        $remainingQueues = AppointmentQueue::whereHas('appointment', function ($query) use ($doctorId, $appointmentDate) {
+                $query->where('doctorId', $doctorId)
+                      ->whereDate('appointmentDate', $appointmentDate);
+            })
+            ->orderBy('queueNumber', 'asc')
+            ->get();
+
+        // Reassign queue numbers sequentially
+        $newNumber = 1;
+        foreach ($remainingQueues as $q) {
+            $q->update(['queueNumber' => $newNumber]);
+            $newNumber++;
+        }
+
+        DB::commit();
+        return response()->json(['message' => 'Patient removed from queue and numbers updated successfully'], 200);
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return response()->json(['message' => 'Failed to delete patient from queue', 'error' => $e->getMessage()], 500);
+    }
+}
 
 
 }
