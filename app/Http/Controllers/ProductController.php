@@ -28,7 +28,7 @@ class ProductController extends Controller
 
     public function eyeDrops()
     {
-        $eyedrops = Medicines::where('type', 'eye_drop')
+        $eyedrops = Product::where('productCategory', '=', 'Eye Drop')
         ->get();
         return response()->json($eyedrops);
        
@@ -36,7 +36,7 @@ class ProductController extends Controller
 
      public function tablets()
     {
-        $tablets = Medicines::where('type', 'tablet')
+        $tablets = Product::where('productCategory', '=', 'tablet')
         ->get();
         return response()->json($tablets);
 
@@ -44,7 +44,7 @@ class ProductController extends Controller
 
      public function ointments()
     {
-        $ointments = Medicines::where('type', 'ointment')
+        $ointments = Product::where('productCategory', '=', 'ointment')
         ->get();
         return response()->json($ointments);
        
