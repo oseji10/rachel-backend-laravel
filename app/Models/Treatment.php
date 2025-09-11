@@ -10,7 +10,7 @@ class Treatment extends Model
     use HasFactory;
     public $table = 'treatment';
     
-    protected $primaryKey = 'treatmentId';
+    // protected $primaryKey = 'treatmentId';
     protected $fillable = [
         'patientId',
         'encounterId',
@@ -24,7 +24,8 @@ class Treatment extends Model
         'frame',
         'lensType',
         'costOfLens',
-        'costOfFrame'
+        'costOfFrame',
+        'treatmentId'
     ];
 
     public function patient()

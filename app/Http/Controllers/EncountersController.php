@@ -239,6 +239,7 @@ class EncountersController extends Controller
         // Validate incoming request data
         $validated = $request->validate([
             'patientId' => 'required|exists:patients,patientId',
+
             // Consulting fields
             'visualAcuityFarPresentingRight' => 'nullable|max:1000',
             'visualAcuityFarPresentingLeft' => 'nullable|max:1000',
@@ -248,12 +249,12 @@ class EncountersController extends Controller
             'visualAcuityFarBestCorrectedLeft' => 'nullable|max:1000',
             'visualAcuityNearRight' => 'nullable|max:1000',
             'visualAcuityNearLeft' => 'nullable|max:1000',
-            
+
             // ContinueConsulting fields
             'chiefComplaintRight' => 'nullable',
             'chiefComplaintLeft' => 'nullable',
             'intraOccularPressureRight' => 'nullable',
-            'intraOccularPressureLeft' => 'nullable',  
+            'intraOccularPressureLeft' => 'nullable',
             'otherComplaintsRight' => 'nullable|max:1000',
             'otherComplaintsLeft' => 'nullable|max:1000',
             'detailedHistoryRight' => 'nullable|max:1000',
@@ -280,7 +281,7 @@ class EncountersController extends Controller
             'retinaLeft' => 'nullable|max:1000',
             'otherFindingsRight' => 'nullable|max:1000',
             'otherFindingsLeft' => 'nullable|max:1000',
-            
+
             // Investigations fields
             'investigationsRequired' => 'nullable',
             'externalInvestigationRequired' => 'nullable',
@@ -291,24 +292,10 @@ class EncountersController extends Controller
             'drugAllergy' => 'nullable',
             'currentMedication' => 'nullable|max:1000',
             'documentId' => 'nullable|exists:document_upload,documentId',
-            
+
             // Refraction fields
             'nearAddRight' => 'nullable|max:1000',
             'nearAddLeft' => 'nullable|max:1000',
-            'OCTRight' => 'nullable|max:1000',
-            'OCTLeft' => 'nullable|max:1000',
-            'FFARight' => 'nullable|max:1000',
-            'FFALeft' => 'nullable|max:1000',
-            'fundusPhotographyRight' => 'nullable|max:1000',
-            'fundusPhotographyLeft' => 'nullable|max:1000',
-            'pachymetryRight' => 'nullable|max:1000',
-            'pachymetryLeft' => 'nullable|max:1000',
-            'CUFTRight' => 'nullable|max:1000',
-            'CUFTLeft' => 'nullable|max:1000',
-            'CUFTKineticRight' => 'nullable|max:1000',
-            'CUFTKineticLeft' => 'nullable|max:1000',
-            'pupilDistanceRight' => 'nullable|max:1000',
-            'pupilDistanceLeft' => 'nullable|max:1000',
             'refractionSphereRight' => 'nullable|max:1000',
             'refractionSphereLeft' => 'nullable|max:1000',
             'refractionCylinderRight' => 'nullable|max:1000',
@@ -317,187 +304,198 @@ class EncountersController extends Controller
             'refractionAxisLeft' => 'nullable|max:1000',
             'refractionPrismRight' => 'nullable|max:1000',
             'refractionPrismLeft' => 'nullable|max:1000',
-            
-            // Treatment fields
-            'treatmentType' => 'nullable|max:1000',
-            'dosage' => 'nullable|max:1000',
-            'doseDuration' => 'nullable|max:1000',
-            'doseInterval' => 'nullable|max:1000',
-            'time' => 'nullable|max:1000',
-            'comment' => 'nullable|max:1000',
             'lensType' => 'nullable|max:1000',
             'costOfLens' => 'nullable|numeric',
             'costOfFrame' => 'nullable|numeric',
-            
+
             // Diagnosis fields
             'overallDiagnosisRight' => 'nullable',
             'overallDiagnosisLeft' => 'nullable',
-            
+
             // Sketch fields
             'rightEyeFront' => 'nullable|string',
             'rightEyeBack' => 'nullable|string',
             'leftEyeFront' => 'nullable|string',
             'leftEyeBack' => 'nullable|string',
+
+            // Treatments (arrays of objects)
+            'eyeDrops' => 'nullable|array',
+            'eyeDrops.*.medicine' => 'nullable|string',
+            'eyeDrops.*.dosage' => 'nullable|string',
+            'eyeDrops.*.doseDuration' => 'nullable|string',
+            'eyeDrops.*.doseInterval' => 'nullable|string',
+            'eyeDrops.*.comment' => 'nullable|string',
+
+            'tablets' => 'nullable|array',
+            'tablets.*.medicine' => 'nullable|string',
+            'tablets.*.dosage' => 'nullable|string',
+            'tablets.*.doseDuration' => 'nullable|string',
+            'tablets.*.doseInterval' => 'nullable|string',
+            'tablets.*.comment' => 'nullable|string',
+
+            'ointments' => 'nullable|array',
+            'ointments.*.medicine' => 'nullable|string',
+            'ointments.*.dosage' => 'nullable|string',
+            'ointments.*.doseDuration' => 'nullable|string',
+            'ointments.*.doseInterval' => 'nullable|string',
+            'ointments.*.comment' => 'nullable|string',
         ]);
 
-        // Prepare data for each table
-        $consultingData = [
-            'patientId' => $validated['patientId'],
-            'visualAcuityFarPresentingRight' => $validated['visualAcuityFarPresentingRight'] ?? null,
-            'visualAcuityFarPresentingLeft' => $validated['visualAcuityFarPresentingLeft'] ?? null,
-            'visualAcuityFarPinholeRight' => $validated['visualAcuityFarPinholeRight'] ?? null,
-            'visualAcuityFarPinholeLeft' => $validated['visualAcuityFarPinholeLeft'] ?? null,
-            'visualAcuityFarBestCorrectedRight' => $validated['visualAcuityFarBestCorrectedRight'] ?? null,
-            'visualAcuityFarBestCorrectedLeft' => $validated['visualAcuityFarBestCorrectedLeft'] ?? null,
-            'visualAcuityNearRight' => $validated['visualAcuityNearRight'] ?? null,
-            'visualAcuityNearLeft' => $validated['visualAcuityNearLeft'] ?? null,
-        ];
+        $result = DB::transaction(function () use ($validated, $request) {
+             $treatmentId = random_int(1000000000, 9999999999);
+            // Create child records (without encounterId yet)
+            $consulting = Consulting::create([
+                'patientId' => $validated['patientId'],
+                'visualAcuityFarPresentingRight' => $validated['visualAcuityFarPresentingRight'] ?? null,
+                'visualAcuityFarPresentingLeft' => $validated['visualAcuityFarPresentingLeft'] ?? null,
+                'visualAcuityFarPinholeRight' => $validated['visualAcuityFarPinholeRight'] ?? null,
+                'visualAcuityFarPinholeLeft' => $validated['visualAcuityFarPinholeLeft'] ?? null,
+                'visualAcuityFarBestCorrectedRight' => $validated['visualAcuityFarBestCorrectedRight'] ?? null,
+                'visualAcuityFarBestCorrectedLeft' => $validated['visualAcuityFarBestCorrectedLeft'] ?? null,
+                'visualAcuityNearRight' => $validated['visualAcuityNearRight'] ?? null,
+                'visualAcuityNearLeft' => $validated['visualAcuityNearLeft'] ?? null,
+            ]);
 
-        $continueConsultingData = [
-            'patientId' => $validated['patientId'],
-            'intraOccularPressureRight' => $validated['intraOccularPressureRight'] ?? null,
-            'intraOccularPressureLeft' => $validated['intraOccularPressureLeft'] ?? null,
-            'otherComplaintsRight' => $validated['otherComplaintsRight'] ?? null,
-            'otherComplaintsLeft' => $validated['otherComplaintsLeft'] ?? null,
-            'detailedHistoryRight' => $validated['detailedHistoryRight'] ?? null,
-            'detailedHistoryLeft' => $validated['detailedHistoryLeft'] ?? null,
-            'findingsRight' => $validated['findingsRight'] ?? null,
-            'findingsLeft' => $validated['findingsLeft'] ?? null,
-            'eyelidRight' => $validated['eyelidRight'] ?? null,
-            'eyelidLeft' => $validated['eyelidLeft'] ?? null,
-            'conjunctivaRight' => $validated['conjunctivaRight'] ?? null,
-            'conjunctivaLeft' => $validated['conjunctivaLeft'] ?? null,
-            'corneaRight' => $validated['corneaRight'] ?? null,
-            'corneaLeft' => $validated['corneaLeft'] ?? null,
-            'ACRight' => $validated['ACRight'] ?? null,
-            'ACLeft' => $validated['ACLeft'] ?? null,
-            'irisRight' => $validated['irisRight'] ?? null,
-            'irisLeft' => $validated['irisLeft'] ?? null,
-            'pupilRight' => $validated['pupilRight'] ?? null,
-            'pupilLeft' => $validated['pupilLeft'] ?? null,
-            'lensRight' => $validated['lensRight'] ?? null,
-            'lensLeft' => $validated['lensLeft'] ?? null,
-            'vitreousRight' => $validated['vitreousRight'] ?? null,
-            'vitreousLeft' => $validated['vitreousLeft'] ?? null,
-            'retinaRight' => $validated['retinaRight'] ?? null,
-            'retinaLeft' => $validated['retinaLeft'] ?? null,
-            'otherFindingsRight' => $validated['otherFindingsRight'] ?? null,
-            'otherFindingsLeft' => $validated['otherFindingsLeft'] ?? null,
-            'chiefComplaintRight' => $validated['chiefComplaintRight'] ?? null,
-            'chiefComplaintLeft' => $validated['chiefComplaintLeft'] ?? null,
-        ];
+            $continueConsulting = ContinueConsulting::create([
+                'patientId' => $validated['patientId'],
+                'chiefComplaintRight' => $validated['chiefComplaintRight'] ?? null,
+                'chiefComplaintLeft' => $validated['chiefComplaintLeft'] ?? null,
+                'intraOccularPressureRight' => $validated['intraOccularPressureRight'] ?? null,
+                'intraOccularPressureLeft' => $validated['intraOccularPressureLeft'] ?? null,
+                'otherComplaintsRight' => $validated['otherComplaintsRight'] ?? null,
+                'otherComplaintsLeft' => $validated['otherComplaintsLeft'] ?? null,
+                'detailedHistoryRight' => $validated['detailedHistoryRight'] ?? null,
+                'detailedHistoryLeft' => $validated['detailedHistoryLeft'] ?? null,
+                'findingsRight' => $validated['findingsRight'] ?? null,
+                'findingsLeft' => $validated['findingsLeft'] ?? null,
+                'eyelidRight' => $validated['eyelidRight'] ?? null,
+                'eyelidLeft' => $validated['eyelidLeft'] ?? null,
+                'conjunctivaRight' => $validated['conjunctivaRight'] ?? null,
+                'conjunctivaLeft' => $validated['conjunctivaLeft'] ?? null,
+                'corneaRight' => $validated['corneaRight'] ?? null,
+                'corneaLeft' => $validated['corneaLeft'] ?? null,
+                'ACRight' => $validated['ACRight'] ?? null,
+                'ACLeft' => $validated['ACLeft'] ?? null,
+                'irisRight' => $validated['irisRight'] ?? null,
+                'irisLeft' => $validated['irisLeft'] ?? null,
+                'pupilRight' => $validated['pupilRight'] ?? null,
+                'pupilLeft' => $validated['pupilLeft'] ?? null,
+                'lensRight' => $validated['lensRight'] ?? null,
+                'lensLeft' => $validated['lensLeft'] ?? null,
+                'vitreousRight' => $validated['vitreousRight'] ?? null,
+                'vitreousLeft' => $validated['vitreousLeft'] ?? null,
+                'retinaRight' => $validated['retinaRight'] ?? null,
+                'retinaLeft' => $validated['retinaLeft'] ?? null,
+                'otherFindingsRight' => $validated['otherFindingsRight'] ?? null,
+                'otherFindingsLeft' => $validated['otherFindingsLeft'] ?? null,
+            ]);
 
-        $investigationsData = [
-            'patientId' => $validated['patientId'],
-            'investigationsRequired' => $validated['investigationsRequired'] ?? null,
-            'externalInvestigationRequired' => $validated['externalInvestigationRequired'] ?? null,
-            'investigationsDone' => $validated['investigationsDone'] ?? null,
-            'HBP' => $validated['HBP'] ?? null,
-            'diabetes' => $validated['diabetes'] ?? null,
-            'pregnancy' => $validated['pregnancy'] ?? null,
-            'drugAllergy' => $validated['drugAllergy'] ?? null,
-            'currentMedication' => $validated['currentMedication'] ?? null,
-            'documentId' => $validated['documentId'] ?? null,
-        ];
+            $investigations = Investigation::create([
+                'patientId' => $validated['patientId'],
+                'investigationsRequired' => $validated['investigationsRequired'] ?? null,
+                'externalInvestigationRequired' => $validated['externalInvestigationRequired'] ?? null,
+                'investigationsDone' => $validated['investigationsDone'] ?? null,
+                'HBP' => $validated['HBP'] ?? null,
+                'diabetes' => $validated['diabetes'] ?? null,
+                'pregnancy' => $validated['pregnancy'] ?? null,
+                'drugAllergy' => $validated['drugAllergy'] ?? null,
+                'currentMedication' => $validated['currentMedication'] ?? null,
+                'documentId' => $validated['documentId'] ?? null,
+            ]);
 
-        $refractionData = [
-            'patientId' => $validated['patientId'],
-            'nearAddRight' => $validated['nearAddRight'] ?? null,
-            'nearAddLeft' => $validated['nearAddLeft'] ?? null,
-            'refractionSphereRight' => $validated['refractionSphereRight'] ?? null,
-            'refractionSphereLeft' => $validated['refractionSphereLeft'] ?? null,
-            'refractionCylinderRight' => $validated['refractionCylinderRight'] ?? null,
-            'refractionCylinderLeft' => $validated['refractionCylinderLeft'] ?? null,
-            'refractionAxisRight' => $validated['refractionAxisRight'] ?? null,
-            'refractionAxisLeft' => $validated['refractionAxisLeft'] ?? null,
-            'refractionPrismRight' => $validated['refractionPrismRight'] ?? null,
-            'refractionPrismLeft' => $validated['refractionPrismLeft'] ?? null,
-            'lensType' => $validated['lensType'] ?? null,
-            'costOfLens' => $validated['costOfLens'] ?? null,
-            'costOfFrame' => $validated['costOfFrame'] ?? null,
-        ];
+            $refraction = Refraction::create([
+                'patientId' => $validated['patientId'],
+                'nearAddRight' => $validated['nearAddRight'] ?? null,
+                'nearAddLeft' => $validated['nearAddLeft'] ?? null,
+                'refractionSphereRight' => $validated['refractionSphereRight'] ?? null,
+                'refractionSphereLeft' => $validated['refractionSphereLeft'] ?? null,
+                'refractionCylinderRight' => $validated['refractionCylinderRight'] ?? null,
+                'refractionCylinderLeft' => $validated['refractionCylinderLeft'] ?? null,
+                'refractionAxisRight' => $validated['refractionAxisRight'] ?? null,
+                'refractionAxisLeft' => $validated['refractionAxisLeft'] ?? null,
+                'refractionPrismRight' => $validated['refractionPrismRight'] ?? null,
+                'refractionPrismLeft' => $validated['refractionPrismLeft'] ?? null,
+                'lensType' => $validated['lensType'] ?? null,
+                'costOfLens' => $validated['costOfLens'] ?? null,
+                'costOfFrame' => $validated['costOfFrame'] ?? null,
+            ]);
 
-        $treatmentData = [
-            'patientId' => $validated['patientId'],
-            'treatmentType' => $validated['treatmentType'] ?? null,
-            'dosage' => $validated['dosage'] ?? null,
-            'doseDuration' => $validated['doseDuration'] ?? null,
-            'doseInterval' => $validated['doseInterval'] ?? null,
-            'time' => $validated['time'] ?? null,
-            'comment' => $validated['comment'] ?? null,
-            'lensType' => $validated['lensType'] ?? null,
-            'costOfLens' => $validated['costOfLens'] ?? null,
-            'costOfFrame' => $validated['costOfFrame'] ?? null,
-        ];
-
-        $diagnosisData = [
-            'patientId' => $validated['patientId'],
+            $diagnosis = Diagnosis::create([
+                // 'patientId' => $validated['patientId'],
+                // 'overallDiagnosisRight' => $validated['overallDiagnosisRight'] ?? null,
+                // 'overallDiagnosisLeft' => $validated['overallDiagnosisLeft'] ?? null,
+                 'patientId' => $validated['patientId'],
             'diagnosisRight' => $validated['diagnosisRight'] ?? null,
             'diagnosisLeft' => $validated['diagnosisLeft'] ?? null,
             'problemsRight' => $validated['problemsRight'] ?? null,
             'problemsLeft' => $validated['problemsLeft'] ?? null,
-        ];
+            ]);
 
-        $sketchData = [
-            'patientId' => $validated['patientId'],
-            'rightEyeFront' => $validated['rightEyeFront'] ?? null,
-            'rightEyeBack' => $validated['rightEyeBack'] ?? null,
-            'leftEyeFront' => $validated['leftEyeFront'] ?? null,
-            'leftEyeBack' => $validated['leftEyeBack'] ?? null,
-        ];
+            $sketch = Sketch::create([
+                'patientId' => $validated['patientId'],
+                'rightEyeFront' => $validated['rightEyeFront'] ?? null,
+                'rightEyeBack' => $validated['rightEyeBack'] ?? null,
+                'leftEyeFront' => $validated['leftEyeFront'] ?? null,
+                'leftEyeBack' => $validated['leftEyeBack'] ?? null,
+            ]);
 
-       $result = DB::transaction(function () use (
-    $validated, 
-    $consultingData, 
-    $continueConsultingData, 
-    $investigationsData,
-    $refractionData,
-    $treatmentData,
-    $diagnosisData, 
-    $sketchData,
-) {
-    // First create all child records WITHOUT encounterId
-    $consulting = Consulting::create($consultingData);
-    $continueConsulting = ContinueConsulting::create($continueConsultingData);
-    $investigations = Investigation::create($investigationsData);
-    $refraction = Refraction::create($refractionData);
-    $treatment = Treatment::create($treatmentData);
-    $diagnosis = Diagnosis::create($diagnosisData);
-    $sketch = Sketch::create($sketchData);
+      
 
-    // Then create the encounter record
-    $encounter = Encounters::create([
-        'patientId' => $validated['patientId'],
-        'consultingId' => $consulting->consultingId,
-        'continueConsultingId' => $continueConsulting->continueConsultingId,
-        'investigationId' => $investigations->investigationId,
-        'refractionId' => $refraction->refractionId,
-        'treatmentId' => $treatment->treatmentId,
-        'diagnosisId' => $diagnosis->diagnosisId,
-        'sketchId' => $sketch->sketchId,
-    ]);
+            // Create encounter
+            $encounter = Encounters::create([
+                'patientId'            => $validated['patientId'],
+                'consultingId'         => $consulting->consultingId,
+                'continueConsultingId' => $continueConsulting->continueConsultingId,
+                'investigationId'      => $investigations->investigationId,
+                'refractionId'         => $refraction->refractionId,
+                'diagnosisId'          => $diagnosis->diagnosisId,
+                'sketchId'             => $sketch->sketchId,
+                 'treatmentId'          => $treatmentId,
+            ]);
 
-    // Now update all child records with the encounterId
-    $consulting->update(['encounterId' => $encounter->encounterId]);
-    $continueConsulting->update(['encounterId' => $encounter->encounterId]);
-    $investigations->update(['encounterId' => $encounter->encounterId]);
-    $refraction->update(['encounterId' => $encounter->encounterId]);
-    $treatment->update(['encounterId' => $encounter->encounterId]);
-    $diagnosis->update(['encounterId' => $encounter->encounterId]);
-    $sketch->update(['encounterId' => $encounter->encounterId]);
+                  // Save treatments (multiple rows)
+            $treatments = [];
+            foreach (['eyeDrops' => 'Eye Drop', 'tablets' => 'Tablet', 'ointments' => 'Ointment'] as $key => $type) {
+                if ($request->has($key)) {
+                    foreach ($request->$key as $row) {
+                        $treatments[] = Treatment::create([
+                            'patientId'     => $validated['patientId'],
+                            'treatmentType' => $type,
+                            'medicine'      => $row['medicine'] ?? null,
+                            'dosage'        => $row['dosage'] ?? null,
+                            'doseDuration'  => $row['doseDuration'] ?? null,
+                            'doseInterval'  => $row['doseInterval'] ?? null,
+                            'comment'       => $row['comment'] ?? null,
+                            'treatmentId'   => $treatmentId, // 🔹 all treatments share this
+                            'encounterId'   => $encounter->encounterId,
+                        ]);
+                    }
+                }
+            }
 
-    
-    return compact(
-        'consulting', 
-        'continueConsulting', 
-        'investigations',
-        'refraction',
-        'treatment',
-        'diagnosis', 
-        'sketch',
-        'encounter'
-    );
-});
+            // Link child records
+            $consulting->update(['encounterId' => $encounter->encounterId]);
+            $continueConsulting->update(['encounterId' => $encounter->encounterId]);
+            $investigations->update(['encounterId' => $encounter->encounterId]);
+            $refraction->update(['encounterId' => $encounter->encounterId]);
+            $diagnosis->update(['encounterId' => $encounter->encounterId]);
+            $sketch->update(['encounterId' => $encounter->encounterId]);
+
+            // foreach ($treatments as $treatment) {
+            //     $treatment->update(['encounterId' => $encounter->encounterId]);
+            // }
+
+            return compact(
+                'consulting',
+                'continueConsulting',
+                'investigations',
+                'refraction',
+                'diagnosis',
+                'sketch',
+                'treatments',
+                'encounter'
+            );
+        });
 
         return response()->json([
             'message' => 'Encounter records created and linked successfully.',
@@ -510,6 +508,7 @@ class EncountersController extends Controller
         ], 500);
     }
 }
+
     
     
 }
