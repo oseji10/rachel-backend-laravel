@@ -27,7 +27,7 @@ class InventoryController extends Controller
 
     public function retrieveLenses()
     {
-        $product = Inventory::where('inventoryType', 'Lens')
+        $product = Inventory::where('inventoryType', 'Opticals')
         ->with('product')
         ->get();
         return response()->json($product);
@@ -59,6 +59,17 @@ class InventoryController extends Controller
         $product = Inventory::where('inventoryType', $request->category)
         ->with('product')
         ->get();
+
+        // $category = $request->category;
+        // if ($category === "Medicine"){
+        //     $product = Medicines::orderBy('medicineId')
+        //     ->get();
+        // }
+        // else if($category === "Frame"){
+        //     $product = Frame::orderBy('medicineId')
+        //     ->get();
+        // }
+
         return response()->json($product);
        
     }
