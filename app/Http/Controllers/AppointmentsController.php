@@ -119,6 +119,64 @@ private function sendSMS($patientPhone, $smsMessage)
 }
 
 
+ public function bookNow(Request $request)
+{
+    $patientId = $request->patientId;
+    $doctorId = $request->doctorId;
+
+    // Create an appointment
+   $appointments = Appointments::create([
+    'patientId' => $patientId,
+    'doctorId'  => $doctorId,
+    'appointmentDate' => now()->toDateString(), // e.g. 2025-09-26
+    'appointmentTime' => now()->toTimeString(), 
+    'status'=> 'scheduled'
+]);
+
+
+    // Fetch patient details
+    $patient = Patients::where('patientId', $patientId)->first();
+    $patientEmail = $patient->email ?? null;
+    $patientPhone = $patient->phoneNumber;
+    $patientName = $patient->firstName . ' ' . $patient->lastName;
+    $appointmentDate = $appointments->appointmentDate;
+    $appointmentTime = $appointments->appointmentTime;
+
+    // Fetch doctor details
+    $doctor = Doctors::where('doctorId', $request->doctorId)->first();
+    $doctorEmail = $doctor->doctors->email ?? null;
+    $doctorName = $doctor->doctorName;
+
+    $messages = [];
+
+    // Send email to patient if email exists
+    if ($patientEmail) {
+        Mail::to($patientEmail)->send(new AppointmentEmail($patientEmail, $patientName, $appointmentDate, $appointmentTime, $doctorName));
+    } else {
+        $messages[] = "Patient email is missing, email was not sent.";
+    }
+
+    // Send email to doctor if email exists
+    if ($doctorEmail) {
+        Mail::to($doctorEmail)->send(new DoctorAppointmentEmail($doctorEmail, $patientName, $appointmentDate, $appointmentTime, $doctorName));
+    } else {
+        $messages[] = "Doctor email is missing, email was not sent.";
+    }
+
+    if ($patientPhone){
+        $smsMessage = "Hello $patientName, your appointment with Dr. $doctorName is scheduled for $appointmentDate at $appointmentTime. Please arrive 15 minutes early. Thank you!";
+        // Queue::push(new SendSMSJob($patientPhone, $smsMessage));
+        $job = new SendSMSJob($patientPhone, $smsMessage);
+        $job->handle();
+
+    }
+
+    return response()->json([
+        'appointment' => $appointments,
+        'messages' => $messages,
+    ], 201);
+}
+
 
     public function createEncounterAppointment(Request $request)
     {

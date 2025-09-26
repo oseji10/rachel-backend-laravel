@@ -120,6 +120,7 @@ use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 
             Route::get('/appointments', [AppointmentsController::class, 'retrieveAll']);
             Route::post('/appointments', [AppointmentsController::class, 'store']);
+            Route::post('/appointments/booknow', [AppointmentsController::class, 'bookNow']);
             Route::post('/appointments/{appointmentId}/check-in', [AppointmentsController::class, 'checkIn']);
             Route::post('/encounter-appointment', [AppointmentsController::class, 'createEncounterAppointment']);
             Route::delete('/appointments/{appointmentId}', [AppointmentsController::class, 'deleteAppointment']);
