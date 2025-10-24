@@ -78,7 +78,8 @@ class ProductController extends Controller
     {
         
         $data = $request->all();
-        $data['uploadedBy'] = Auth::user()->id;
+        // return $data['uploadedBy'] = Auth::user()->id;
+        
         $data['productStatus'] = 'active';
         
         $product = Product::create($data);
