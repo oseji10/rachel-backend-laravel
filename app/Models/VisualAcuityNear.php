@@ -10,4 +10,6 @@ class VisualAcuityNear extends Model
     use HasFactory;
     public $table = 'visual_acuity_near';
     protected $fillable = ['name', 'status'];
+
+    
 }

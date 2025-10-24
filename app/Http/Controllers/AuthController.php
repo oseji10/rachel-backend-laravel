@@ -79,7 +79,7 @@ protected $jwt;
         // 'lga' => $user->staff && $user->staff->lga ? $user->staff->lga_info->lgaName ?? '' : null, // Safe access
         'access_token' => $accessToken,
     ])
-        ->cookie('access_token', $accessToken, 30, null, null, true, true, false, 'strict')
+        ->cookie('access_token', $accessToken, 60, null, null, true, true, false, 'strict')
         ->cookie('refresh_token', $refreshToken, 14 * 24 * 60, null, null, true, true, false, 'strict');
 }
 
@@ -114,7 +114,7 @@ protected $jwt;
         ]);
 
         return response()->json(['message' => 'Token refreshed'])
-            ->cookie('access_token', $newAccessToken, 15, null, null, true, true, false, 'strict')
+            ->cookie('access_token', $newAccessToken, 60, null, null, true, true, false, 'strict')
             ->cookie('refresh_token', $newRefreshToken, 14 * 24 * 60, null, null, true, true, false, 'strict');
     }
       

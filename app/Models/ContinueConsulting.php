@@ -42,6 +42,9 @@ class ContinueConsulting extends Model
 'otherFindingsLeft',
 'chiefComplaintRight',
 'chiefComplaintLeft',
+'nearRight',
+'nearLeft',
+
     ];
     protected $primaryKey = 'continueConsultingId';
     public function encounters()

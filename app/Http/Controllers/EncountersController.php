@@ -190,6 +190,7 @@ class EncountersController extends Controller
                             'encounters.appointments',
                             'encounters.investigations',
                             'encounters.treatments',
+                            'encounters.findings',
                     ])
                     //  ->where('patientId', '=', '113')
                     ->get();
@@ -307,6 +308,32 @@ class EncountersController extends Controller
             'lensType' => 'nullable|max:1000',
             'costOfLens' => 'nullable|numeric',
             'costOfFrame' => 'nullable|numeric',
+            'pd' => 'nullable|max:1000',
+            'bridge' => 'nullable|max:1000',
+            'temple' => 'nullable|max:1000',
+            'eyeSize' => 'nullable|max:1000',
+            'decentration' => 'nullable|max:1000',
+            'segmentMeasurement' => 'nullable|max:1000',
+            'frameType' => 'nullable|max:1000',
+            'frameColor' => 'nullable|max:1000',
+            'lensColor' => 'nullable|max:1000',
+            'lensCost' => 'nullable|numeric',
+            'surfacing' => 'nullable|max:1000',
+            'others' => 'nullable|max:1000',
+
+            //Findings fields
+            'OCTRight' => 'nullable|max:1000',
+            'OCTLeft' => 'nullable|max:1000',
+            'FFARight' => 'nullable|max:1000',
+            'FFALeft' => 'nullable|max:1000',
+            'fundusPhotographyRight' => 'nullable|max:1000',
+            'fundusPhotographyLeft' => 'nullable|max:1000',
+            'pachymetryRight' => 'nullable|max:1000',
+            'pachymetryLeft' => 'nullable|max:1000',
+            'CVFTRight' => 'nullable|max:1000',
+            'CVFTLeft' => 'nullable|max:1000',
+            'CVFTKineticRight' => 'nullable|max:1000',
+            'CVFTKineticLeft' => 'nullable|max:1000',
 
             // Diagnosis fields
             'overallDiagnosisRight' => 'nullable',
@@ -390,6 +417,23 @@ class EncountersController extends Controller
                 'otherFindingsLeft' => $validated['otherFindingsLeft'] ?? null,
             ]);
 
+
+            $findings = Findings::create([
+                'patientId' => $validated['patientId'],
+                'OCTRight' => $validated['OCTRight'] ?? null,
+                'OCTLeft' => $validated['OCTLeft'] ?? null,
+                'FFARight' => $validated['FFARight'] ?? null,
+                'FFALeft' => $validated['FFALeft'] ?? null,
+                'fundusPhotographyRight' => $validated['fundusPhotographyRight'] ?? null,
+                'fundusPhotographyLeft' => $validated['fundusPhotographyLeft'] ?? null,
+                'pachymetryRight' => $validated['pachymetryRight'] ?? null,
+                'pachymetryLeft' => $validated['pachymetryLeft'] ?? null,
+                'CUFTRight' => $validated['CVFTRight'] ?? null,
+                'CUFTLeft' => $validated['CVFTLeft'] ?? null,
+                'CUFTKineticRight' => $validated['CVFTKineticRight'] ?? null,
+                'CUFTKineticLeft' => $validated['CVFTKineticLeft']
+            ]);
+
             $investigations = Investigation::create([
                 'patientId' => $validated['patientId'],
                 'investigationsRequired' => $validated['investigationsRequired'] ?? null,
@@ -418,6 +462,18 @@ class EncountersController extends Controller
                 'lensType' => $validated['lensType'] ?? null,
                 'costOfLens' => $validated['costOfLens'] ?? null,
                 'costOfFrame' => $validated['costOfFrame'] ?? null,
+                'pd' => $validated['pd'] ?? null,
+                'bridge' => $validated['bridge'] ?? null,
+                'temple' => $validated['temple'] ?? null,
+                'eyeSize' => $validated['eyeSize'] ?? null,
+                'decentration' => $validated['decentration'] ?? null,
+                'segmentMeasurement' => $validated['segmentMeasurement'] ?? null,
+                'frameType' => $validated['frameType'] ?? null,
+                'frameColor' => $validated['frameColor'] ?? null,
+                'lensColor' => $validated['lensColor'] ?? null,
+                'lensCost' => $validated['lensCost'] ?? null,
+                'surfacing' => $validated['surfacing'] ?? null,
+                'others' => $validated['others'] ?? null,
             ]);
 
             $diagnosis = Diagnosis::create([
@@ -450,7 +506,8 @@ class EncountersController extends Controller
                 'refractionId'         => $refraction->refractionId,
                 'diagnosisId'          => $diagnosis->diagnosisId,
                 'sketchId'             => $sketch->sketchId,
-                 'treatmentId'          => $treatmentId,
+                'treatmentId'          => $treatmentId,
+                'findingId'          => $findings->findingId,
             ]);
 
                   // Save treatments (multiple rows)
@@ -480,6 +537,7 @@ class EncountersController extends Controller
             $refraction->update(['encounterId' => $encounter->encounterId]);
             $diagnosis->update(['encounterId' => $encounter->encounterId]);
             $sketch->update(['encounterId' => $encounter->encounterId]);
+            $findings->update(['encounterId' => $encounter->encounterId]);
 
             // foreach ($treatments as $treatment) {
             //     $treatment->update(['encounterId' => $encounter->encounterId]);
@@ -493,7 +551,8 @@ class EncountersController extends Controller
                 'diagnosis',
                 'sketch',
                 'treatments',
-                'encounter'
+                'encounter',
+                'findings'
             );
         });
 

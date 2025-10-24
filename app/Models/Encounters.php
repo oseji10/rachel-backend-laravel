@@ -57,4 +57,9 @@ class Encounters extends Model
     {
         return $this->hasOne(Treatment::class, 'encounterId');
     }
+
+    public function findings()
+    {
+        return $this->hasOne(Findings::class, 'encounterId');
+    }
 }
