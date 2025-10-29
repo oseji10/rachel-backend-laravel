@@ -11,7 +11,7 @@ class ServiceController extends Controller
 {
     public function retrieveAll()
     {
-        $service = Service::all();
+        $service = Service::orderby('created_at', 'desc')->get();
         return response()->json($service);
        
     }
@@ -26,9 +26,10 @@ class ServiceController extends Controller
 
     public function store(Request $request)
     {
-        
+      
+     
         $data = $request->all();
-        $data['uploadedBy'] = Auth::user()->id;
+         $data['uploadedBy'] = Auth::user()->id;
         $data['productStatus'] = 'active';
         
         $service = Service::create($data);

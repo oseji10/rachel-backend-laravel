@@ -49,6 +49,7 @@ use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 // });
 
     Route::middleware(['auth.jwt'])->group(function () {
+        
         Route::get('/user', function () {
             $user = auth('api')->user();
             return response()->json([

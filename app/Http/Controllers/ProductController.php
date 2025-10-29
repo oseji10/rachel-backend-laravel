@@ -11,7 +11,7 @@ class ProductController extends Controller
 {
     public function retrieveAll()
     {
-        $product = Product::all();
+        $product = Product::orderby('created_at', 'desc')->get();
         return response()->json($product);
        
     }
